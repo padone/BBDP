@@ -1,0 +1,371 @@
+﻿<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8"> 
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>BBDP</title>
+		<link rel="Shortcut Icon" type="image/x-icon" href="img/frame/icon.ico">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+		<link href="frame/metisMenu/metisMenu.css" rel="stylesheet">
+		<script src="frame/metisMenu/metisMenu.js"></script>
+		<link href="frame/sb-admin-2/sb-admin-2.css" rel="stylesheet">
+		<script src="frame/sb-admin-2/sb-admin-2.js"></script>
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+		<!-- 醫生端框架 css -->
+		<link href="css/doctorFrame.css" rel="stylesheet">
+		<script>
+			var isSave = false;
+			var changed = false;
+			
+			$(document).ready(function() {
+				//檢查是否修改
+				/*
+				$("input[type='checkbox']").change(function() {		//偵測頁面上任一個checkbox有沒有被修改
+					changed = true;
+				});
+				$("input[type='text']").change(function() {		//偵測頁面上任一個文字輸入欄位有沒有被修改
+					changed = true;
+				});
+				$("select").change(function () {		//偵測頁面上任一個下拉式選單有沒有被修改
+					changed = true;
+				});
+				*/
+				$("#typeOption").change(function() {
+					changed = true;
+				});
+				$("#contentOption").change(function() {
+					changed = true;
+				});
+				$("#inputContent").change(function() {
+					changed = true;
+				});
+		
+			});
+			
+			$(window).on("beforeunload", function() {
+				if(changed && !isSave) return "尚有未儲存的修改。";
+			});
+			
+			function htmlEscapeCharacter(str){
+				str = str.replace(/\'/g, "&#39;");
+				str = str.replace(/\"/g, "&#34;");
+				str = str.replace(/\\/g, "&#92;");
+				return str;
+			}
+
+			function returnEscapeCharacter(str){
+				str = str.replace(/&#39;/g, "\'");
+				str = str.replace(/&#34;/g, '\"');
+				str = str.replace(/&#92;/g, '\\');
+				return str;
+			}
+
+
+			var doctorNoticeIDArray = [];
+			var typeArray = [];
+			var contentArray = [];
+			var noticeAmount;
+
+			$(document).ready(function() {
+				$.getScript("js/judgeLogin.js");		//判斷登入
+				getDoctorNitice();
+			});
+
+			//取得醫生所有的注意事項
+			function getDoctorNitice(){
+				$.ajax({
+					type: "GET",
+					url: "NoticeServlet",
+					data: {option: "getDoctorNitice"},
+					dataType: "json",
+													
+					success : function(response){
+						noticeAmount = response.length;
+						for(var i = 0; i<response.length; i++){
+							doctorNoticeIDArray[i] = response[i]["doctorNoticeID"];
+							typeArray[i] = returnEscapeCharacter(response[i]["type"]);
+							contentArray[i] = response[i]["content"];
+						}
+						initialType();
+					},
+			 
+					error : function(){
+						console.log("server沒有回應");
+					}
+				});
+			}
+
+			//初始化分類
+			function initialType(){
+				$.ajax({
+				type: "GET",
+				url: "NoticeServlet",
+				data: {option: "searchNoticeType"},
+				dataType: "json",
+												
+				success : function(response){
+					$("#typeOption").empty();		//分類
+					$("#contentOption").empty();	//內容
+
+					var typeOption = "<option value=''>注意事項分類</option>";
+					var contentOption = "";
+
+					for(var i = 0; i<response.length; i++){  	
+						typeOption += "<option value='"+ response[i]["type"] +"'>"+response[i]["type"]+"</option>";												
+					}
+
+					if(noticeAmount==0){
+						contentOption += "<option value=''>無</option>";
+					}
+					else{
+						for(var i = 0 ; i < noticeAmount; i ++){
+							contentOption += "<option value='"+ contentArray[i] +"'>"+contentArray[i]+"</option>";
+						}
+					}				
+
+					$("#typeOption").append(typeOption);
+					$("#contentOption").append(contentOption);
+					
+				},
+		 
+				error : function(){
+					console.log("server沒有回應");
+				}
+			});
+			}
+
+			//選擇分類
+			function changeType(){
+				$("#contentOption").empty();
+				var option = "";
+
+				if($('#typeOption option:selected').val().length == 0){		//所有類型
+					for(var i = 0 ; i < noticeAmount; i ++){
+						option += "<option value='"+ contentArray[i] +"'>"+contentArray[i]+"</option>";
+					}
+				}
+				else{
+					for(var i = 0 ; i < noticeAmount; i ++){
+						if(typeArray[i] == $('#typeOption option:selected').val()){
+							option += "<option value='"+ contentArray[i] +"'>"+contentArray[i]+"</option>";
+						}
+					}
+				}
+				$("#contentOption").append(option);
+			}
+
+			//從模板新增注意事項給病患
+			function addPatientNoticeFromTemplate(){
+				isSave =true;
+
+				$("#patientNoticeModalTitle").empty();
+				$("#patientNoticeModalContent").empty();
+
+				if($('#contentOption option:selected').val() == ""){
+					$("#patientNoticeModalTitle").append("提示");
+					$("#patientNoticeModalContent").append("請選擇注意事項內容");
+					$("#patientNoticeModal").modal("show");
+				}
+				else{
+					//讓送出按鈕不能按
+					$("#sendTemplateButton").empty();
+					$("#sendTemplateButton").append("<button type='button' class='btn btn-default disabled' >新增中...</button>");
+					$("#sendInputButton").empty();
+					$("#sendInputButton").append("<button type='button' class='btn btn-default disabled' >新增中...</button>");
+
+					var today = new Date();					
+					var time = today.getFullYear() + '-'+ (today.getMonth()+1) + '-' + today.getDate() + ' ' 
+						+ today.getHours() + ':' + today.getMinutes() + ':' + today.getSeconds();
+
+					$.ajax({
+						type: "GET",
+						url: "NoticeServlet",
+						data: {option: "addPatientNotice" ,time : time,content : htmlEscapeCharacter($('#contentOption option:selected').val())},
+						dataType: "text",
+														
+						success : function(response){
+							if(response=="成功送出"){
+								$("#patientNoticeModalTitle").append("提示");
+								$("#patientNoticeModalContent").append("新增成功");
+								$("#patientNoticeModal").modal("show");
+								//清空輸入
+								initialType();
+								$('#inputContent').val("");
+								//重設送出按鈕
+								$("#sendTemplateButton").empty();
+								$("#sendTemplateButton").append("<button type='button' class='btn btn-default' onclick='addPatientNoticeFromTemplate()'>送出</button>");
+								$("#sendInputButton").empty();
+								$("#sendInputButton").append("<button type='button' class='btn btn-default' onclick='addPatientNoticeFromInput()'>送出</button>");
+							}
+							else{
+								$("#patientNoticeModalTitle").append("提示");
+								$("#patientNoticeModalContent").append(response);
+								$("#patientNoticeModal").modal("show");
+							}
+						},
+				 
+						error : function(){
+							console.log("server沒有回應");
+						}
+					});
+				}
+			}
+
+			//從輸入新增注意事項給病患
+			function addPatientNoticeFromInput(){
+				isSave =true;
+
+				$("#patientNoticeModalTitle").empty();
+				$("#patientNoticeModalContent").empty();
+
+				if($("#inputContent").val() == ""){
+					$("#patientNoticeModalTitle").append("提示");
+					$("#patientNoticeModalContent").append("請輸入注意事項內容");
+					$("#patientNoticeModal").modal("show");
+				}
+				else if(htmlEscapeCharacter($("#inputContent").val()).length > 50){
+					$("#patientNoticeModalTitle").append("提示");
+					$("#patientNoticeModalContent").append("字數超過限制");
+					$("#patientNoticeModal").modal("show");
+				}
+				else{
+					//讓送出按鈕不能按
+					$("#sendTemplateButton").empty();
+					$("#sendTemplateButton").append("<button type='button' class='btn btn-default disabled' >新增中...</button>");
+					$("#sendInputButton").empty();
+					$("#sendInputButton").append("<button type='button' class='btn btn-default disabled' >新增中...</button>");
+
+
+					var today = new Date();					
+					var time = today.getFullYear() + '-'+ (today.getMonth()+1) + '-' + today.getDate() + ' ' 
+						+ today.getHours() + ':' + today.getMinutes() + ':' + today.getSeconds();
+
+					$.ajax({
+						type: "GET",
+						url: "NoticeServlet",
+						data: {option: "addPatientNotice" ,time : time, content : htmlEscapeCharacter($("#inputContent").val())},
+						dataType: "text",
+														
+						success : function(response){
+							if(response=="成功送出"){
+								$("#patientNoticeModalTitle").append("提示");
+								$("#patientNoticeModalContent").append("新增成功");
+								$("#patientNoticeModal").modal("show");
+								//清空輸入
+								initialType();
+								$('#inputContent').val("");
+								//重設送出按鈕
+								$("#sendTemplateButton").empty();
+								$("#sendTemplateButton").append("<button type='button' class='btn btn-default' onclick='addPatientNoticeFromTemplate()'>送出</button>");
+								$("#sendInputButton").empty();
+								$("#sendInputButton").append("<button type='button' class='btn btn-default' onclick='addPatientNoticeFromInput()'>送出</button>");
+							}
+							else{
+								$("#patientNoticeModalTitle").append("提示");
+								$("#patientNoticeModalContent").append(response);
+								$("#patientNoticeModal").modal("show");
+							}
+						},
+				 
+						error : function(){
+							console.log("server沒有回應");
+						}
+					});
+				}
+			}
+		</script>
+	</head>
+	<body>
+		<div id="wrapper">
+			<!-- prepend navbar in doctorFrame.js -->
+			<div id="page-wrapper">
+				<div class="row">
+					<!-- prepend nav-tabs in patientInformationFrame.js -->
+					<!-- 內容 -->
+					<div class="col-md-12 col-xs-12">
+						<div class="row">
+							<div class="col-md-12 col-xs-12" style="margin-top: 3vh; margin-bottom: 3vh;">
+								<span class="lead"><b>新增注意事項</b></span>
+							</div>
+						</div>
+						<div class="row" style="padding-left: 1vw; padding-right: 1vw;">
+							<!-- 灰框 -->
+							<div class="panel panel-default left-list">
+								<!-- 灰框上面 -->
+								<div class="panel-heading">
+									<div class="row" style="margin-left: 0.5vw;">
+										<h5><b>分類</b></h5>
+									</div>
+									<div class="row">
+										<div class="col-md-6">
+											<!-- 灰框上面的分類選單 -->
+											<select id="typeOption" class="form-control" onChange="changeType()">
+												<option value="" selected="selected">注意事項分類</option>
+												<option value="">巴金森氏症</option>
+											</select>
+										</div>
+										<div class="col-md-6"></div>
+									</div>
+									<div class="row" style="margin-left: 0.5vw;">
+										<h5><b>注意事項</b></h5>
+									</div>
+									<div class="row">
+										<div  class="col-md-6 col-sm-9" style="margin-bottom: 1vh;">
+											<!-- 灰框上面的注意事項選單 -->
+											<select id="contentOption" class="form-control" onChange="">
+												<option value="" selected="selected"></option>
+												<option value="" >每日持續運動</option>
+											</select>
+										</div>
+										<div id="sendTemplateButton" class="col-md-3 col-sm-3" style="margin-bottom: 1vh;">
+											<button type="button" class="btn btn-default" onclick="addPatientNoticeFromTemplate()">送出</button>
+										</div>
+										<div class="col-md-3 col-sm-0" style="margin-bottom: 1vh;"></div>
+									</div>
+								</div>
+								<!-- 灰框下面 -->
+								<div class="panel-body">
+									<div class="row" style="margin-left: 0.5vw;">
+										<h5><b>直接新增注意事項</b></h5>
+									</div>
+									<div class="row">
+										<div class="col-md-6 col-sm-9" style="margin-bottom: 1vh;">
+											<input id="inputContent" type="text" class="form-control" placeholder="請輸入要新增的注意事項..." />
+										</div>
+										<div id="sendInputButton" class="col-md-3 col-sm-3" style="margin-bottom: 1vh;">
+											<button type="button" class="btn btn-default" onclick="addPatientNoticeFromInput()">送出</button>
+										</div>
+										<div class="col-md-3 col-sm-0" style="margin-bottom: 1vh;"></div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- 提示訊息 modal -->
+		<div id="patientNoticeModal" class="modal fade" role="dialog">
+			<div class="modal-dialog modal-sm">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+						<h4 id="patientNoticeModalTitle" class="modal-title">結果</h4>		<!-- 提示訊息 modal 標題 -->
+					</div>
+					<div class="modal-body">
+						<p id="patientNoticeModalContent"></p>		<!-- 提示訊息 modal 內容 -->
+					</div>
+					<div class="modal-footer">				<!-- 按鈕可以只有確定，onclick的function可自行更改 -->
+						<button type="button" class="btn btn-default" data-dismiss="modal" onclick="">確定</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- 醫生端框架 js -->
+		<script src="js/doctorFrame.js"></script>
+		<!-- 病患資訊框架 js -->
+		<script src="js/patientInformationFrame.js"></script>
+	</body>
+</html>

@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8"> 
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>BBDP</title>
+		<link rel="Shortcut Icon" type="image/x-icon" href="img/frame/icon.ico">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+		<link href="frame/metisMenu/metisMenu.css" rel="stylesheet">
+		<script src="frame/metisMenu/metisMenu.js"></script>
+		<link href="frame/sb-admin-2/sb-admin-2.css" rel="stylesheet">
+		<script src="frame/sb-admin-2/sb-admin-2.js"></script>
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+		<script src="https://cdn.rawgit.com/zenorocha/clipboard.js/v1.6.0/dist/clipboard.min.js"></script>
+		<!-- 醫生端框架 css -->
+		<link href="css/doctorFrame.css" rel="stylesheet">
+		<script src="js/patientQuestionnaire.js"></script>
+	</head>
+	<body>
+		<div id="wrapper">
+			<!-- prepend navbar in doctorFrame.js -->
+			<div id="page-wrapper">
+				<div class="row">
+					<!-- 內容 -->
+					<div class="col-md-12">
+						<div class="row">
+							<!-- 左邊灰框 -->
+							<div class="col-md-4" style="margin-top: 3vh; margin-bottom: 3vh;">
+								<div class="row">
+									<div class="col-md-12">
+										<button type="button" class="btn btn-default" onclick="location.href='NewPatientQuestionnaire.html'">新增問卷</button>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-12">
+										<br />
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-12">
+										<div class="panel panel-default left-list" style="min-height: 68vh; max-height: 68vh;">
+											<div class="panel-heading">
+												<!-- 左邊灰框上面的選單 -->
+												<div class="form-group row" style="margin-bottom: 0;">
+													<div class="col-md-6 col-sm-6" style="margin-bottom: 0.5vh; margin-top: 0.5vh;">
+														<select class="form-control" id = "searchQuestionnaire">
+															<option value="all">全部 (已填寫)</option>
+															<option value="0">自評</option>
+															<option value="1">後評</option>
+															<option value="not">未填寫問卷</option>
+														</select>
+													</div>												
+													<div class="col-md-6 col-sm-6" style="margin-bottom: 0.5vh; margin-top: 0.5vh;">
+														<select class="form-control" id = "questionnaireType">
+															<option value="">問卷分類</option>
+														</select>
+													</div>
+												</div>	
+												<div class="form-group row" style="margin-bottom: 0;">
+													<div class="col-md-6 col-sm-6" style="margin-bottom: 0.5vh; margin-top: 0.5vh;">
+														<select class="form-control" id = "questionnaireDateRange">
+															<option value="">請選擇</option>
+															<option value="year">年</option>
+															<option value="month">月</option>
+														</select>
+													</div>
+													<div class="col-md-6 col-sm-6" style="margin-bottom: 0.5vh; margin-top: 0.5vh;">
+														<select class="form-control" id = "questionnaireDate">
+															<option value="">所有時間</option>
+														</select>
+													</div>
+												</div>
+											</div>
+											<div class="panel-body" style="overflow-y: auto;">
+												<div class="list-group " id = "questionnaireList">
+													<!-- 左邊灰框下面的項目(動態產生) -->
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-8" style="margin-top: 3vh; margin-bottom: 3vh;" id = "allArea">
+								<div class="row">
+									<div class="col-md-9 col-sm-9 col-xs-9">
+										<!-- 右邊灰框上面的粉紅色的標題 -->
+										<div class="list-group list-group-horizontal" id = "questionnaireTitle">
+
+										</div>
+									</div>
+									<div class="col-md-3 col-sm-3 col-xs-3">
+										<!-- 右上角的更多按鈕 -->
+										<div class="btn-group pull-right" id="changeButton">
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-12">
+										<br />
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-12">
+										<!-- 右邊灰框 -->
+										<div class="panel panel-default right-content" style="min-height: 68vh; max-height: 68vh;" id = "questionList">
+
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!--取消問卷除訊息 modal -->
+		<div id="cancelModal" class="modal fade" role="dialog">
+			<div class="modal-dialog modal-sm">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+						<h4 class="modal-title">取消問卷</h4>		<!-- 提示訊息 modal 標題 -->
+					</div>
+					<div class="modal-body">
+						<p>確定取消給病患的問卷嗎？</p>		<!-- 提示訊息 modal 內容 -->
+					</div>
+					<div class="modal-footer">				<!-- 按鈕可以只有確定，onclick的function可自行更改 -->
+						<button type="button" class="btn btn-default" data-dismiss="modal" onclick="cancelQuestionnaire()">確定</button>
+						<button type="button" class="btn btn-default" data-dismiss="modal" data-dismiss="modal">取消</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- 刪除訊息 modal -->
+		<div id="deleteModal" class="modal fade" role="dialog">
+			<div class="modal-dialog modal-sm">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+						<h4 class="modal-title">刪除</h4>		<!-- 提示訊息 modal 標題 -->
+					</div>
+					<div class="modal-body">
+						<p>確定刪除此問卷答案嗎？</p>		<!-- 提示訊息 modal 內容 -->
+					</div>
+					<div class="modal-footer">				<!-- 按鈕可以只有確定，onclick的function可自行更改 -->
+						<button type="button" class="btn btn-default" data-dismiss="modal" onclick="deleteDoctorAnswer()">確定</button>
+						<button type="button" class="btn btn-default" data-dismiss="modal" data-dismiss="modal">取消</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- 病歷摘要產生 modal -->
+		<div id="medicalRecordModal" class="modal fade" role="dialog">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+						<h4 class="modal-title">病歷摘要產生</h4>
+					</div>
+					<div class="modal-body">
+					<!-- 病歷摘要產生內容 -->
+						<textarea class="form-control" id = "medicalRecordContent" style="height: 30vh;" placeholder="請輸入病歷摘要內容...">
+						</textarea>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default pull-left copyButton">複製</button>		<!-- 一鍵複製 -->
+						<div id = "medicalRecordIsNull" style="display:inline;padding-right:1vw;color:red"></div><button type="button" class="btn btn-default" onclick="sendMedicalRecord()">新增</button>
+					</div>
+				</div>
+			</div>
+		</div>		
+		<!-- 醫生端框架 js -->
+		<script src="js/doctorFrame.js"></script>
+		<script src="js/modalGenerator.js"></script>
+		<!-- 病患資訊框架 js -->
+		<script src="js/patientInformationFrame.js"></script>
+		<script>
+			var url = window.location.href;
+			var needID = url.split("?")[1].split("=")[1];	//取得ID 答案或待填
+			var IDType = url.split("?")[1].split("=")[0];	//取得ID類
+			var sendSuccess = 1;
+			var questionnaireID = "";
+			var partName = [];
+			var partArray = [];
+			var tempHeading = "";
+			var scoring = "";
+			var doctorScoring = "";
+			var writeFrom = "";
+			var answerArray = [];
+			var answerPatientArray = [];
+			var selfDescription = "";
+			var color = "";
+			var questionCount = 0;
+			var changed = false;
+			var questionnaireName = "";
+			$(document).ready(function(){	
+				if(IDType == "num"){
+					$.ajax({
+						url : "PatientQuestionnaireServlet",
+						data : {
+							state : "checkAnswerID",
+							answerID : needID
+						},
+						success : function(response){
+							if(response)
+								getAnswer();
+							else{
+								modalGenerator("警告", "網址錯誤，問卷不存在");	
+								$("#allArea").empty();
+							}
+						},
+						error : function() {
+							console.log("錯誤訊息");
+						}
+					});
+				}else if(IDType == "un"){
+					$.ajax({
+						url : "PatientQuestionnaireServlet",
+						data : {
+							state : "checkUnfilledID",
+							unfilledID : needID
+						},
+						success : function(response){
+							if(response){
+								$("#searchQuestionnaire").val("not");
+								$('#searchQuestionnaire').change();
+								getQuestionnaireList();
+								getUnfilledQuestionnaire();
+							}else{
+								modalGenerator("警告", "網址錯誤，問卷不存在");	
+								$("#allArea").empty();
+							}
+						},
+						error : function() {
+							console.log("錯誤訊息");
+						}
+					});			
+				}else{
+					modalGenerator("警告", "網址錯誤，問卷不存在");	
+					$("#allArea").empty();
+				}
+			});			
+			function getAnswer(){
+				$.ajax({
+					url : "PatientQuestionnaireServlet",
+					data : {
+						state : "getQuestionnaireAnswer",
+						answerID : needID
+					},
+					dataType : "json",
+					success : function(response){
+						var temp = "";
+						questionnaireName = response[0];
+						questionnaireID = response[2];
+						scoring = response[3];
+						writeFrom = response[4];
+						if(response[5]) selfDescription = response[5];			
+						if(writeFrom == "自評"){
+							color = "pink";
+							temp += "<li class='list-group-item pinkTitle'>"+questionnaireName+"</li>";
+							temp += "<li class='list-group-item pinkTitle'>"+response[1].substr(0,16)+"</li>";					
+							temp += '<li class="list-group-item pinkTitle" id = "score">自評</li>';
+							$("#questionnaireTitle").empty().append(temp);
+							getMoreButton();
+						}else{
+							color = "green";
+							temp += "<li class='list-group-item greenTitle'>"+questionnaireName+"</li>";
+							temp += "<li class='list-group-item greenTitle'>"+response[1].substr(0,16)+"</li>";					
+							temp += '<li class="list-group-item greenTitle" id = "score">後評</li>';
+							$("#questionnaireTitle").empty().append(temp);	
+							$("#changeButton").empty().append('<button type="button" class="btn btn-default" onclick="medicalRecord()">轉換病歷</button><button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button><ul class="dropdown-menu" role="menu"><li><a style="cursor: pointer;" onclick="deleteModalShow()" >刪除</a></li></ul>');
+							getPatientOptionAnswer();							
+						}
+						getOptionAnswer();
+						getQuestionnaire();
+					},
+					error : function() {
+						console.log("錯誤訊息");
+					}
+				});				
+			}
+			function getMoreButton(){
+				$.ajax({
+					url : "PatientQuestionnaireServlet",
+					data : {
+						state : "getMoreButton",
+						answerID : needID
+					},	
+					success : function(response){
+						if(response){
+							$("#changeButton").empty().append('<div class="btn-group pull-right"><button type="button" class="btn btn-default" onclick="location.href=\'EditPatientQuestionnaire.html?num='+response+'\'">查看後評</button></div>');
+						}else{
+							$("#changeButton").empty().append('<div class="btn-group pull-right"><button type="button" class="btn btn-default" onclick="newDoctorAnswer()">新增後評</button></div>');
+						}
+					},
+					error : function() {
+						console.log("錯誤訊息");
+					}
+				});				
+			}
+			function getOptionAnswer(){
+				$.ajax({
+					url : "PatientQuestionnaireServlet",
+					data : {
+						state : "getOptionAnswer",
+						answerID : needID
+					},			
+					dataType : "json",
+					success : function(response){
+						answerArray.length = 0;
+						answerArray[0] = "";
+						for(var i=0; i<response.length; i++){
+							answerArray[i] = response[i];
+						}					
+					},
+					error : function() {
+						console.log("錯誤訊息");
+					}
+				});
+			}
+			function getPatientOptionAnswer(){
+				$.ajax({
+					url : "PatientQuestionnaireServlet",
+					data : {
+						state : "getPatientOptionAnswer",
+						answerID : needID
+					},			
+					dataType : "json",
+					success : function(response){
+						answerPatientArray.length = 0;
+						answerPatientArray[0] = "";
+						for(var i=0; i<response.length; i++){
+							answerPatientArray[i] = response[i];
+						}					
+					},
+					error : function() {
+						console.log("錯誤訊息");
+					}
+				});
+			}
+			function getUnfilledQuestionnaire(){
+				$.ajax({
+					url : "PatientQuestionnaireServlet",
+					data : {
+						state : "getUnfilledQuestionnaire",
+						unfilledID : needID
+					},
+					dataType : "json",
+					success : function(response){
+						color = "pink";
+						questionnaireID = response[2];
+						$("#questionnaireTitle").empty().append('<li class="list-group-item pinkTitle">'+response[0]+'</li>');
+						tempHeading = '<div class="row" style="margin-left: 0.5vw;"><h5><b>發送日期：'+response[1].substr(0,10)+'</b></h5></div>';
+						$("#changeButton").empty().append('<div class="btn-group pull-right"><button type="button" class="btn btn-default" data-toggle="modal" data-target="#cancelModal">取消問卷</button></div>');
+						getQuestionnaire();
+					},
+					error : function() {
+						console.log("錯誤訊息");
+					}
+				});				
+			}
+			function getQuestionnaire(){
+				$.ajax({
+					url : "QuestionnaireModuleServlet",
+					data : {
+						state : "getQuestionList",
+						questionnaireID : questionnaireID
+					},
+					dataType : "json",
+					success : function(response) {
+						partArray.length = 0;
+						partArray[0] = "";
+						var tempPart = parseInt(response[0]);
+						partArray[tempPart] = response[1];
+						for(var i=2; i<response.length; i+=2){
+							if(tempPart != parseInt(response[i])){
+								partArray[parseInt(response[i])] = response[i+1];
+								tempPart = parseInt(response[i]);								
+							}else{
+								partArray[parseInt(response[i])] += ","+response[i+1];	
+							}				
+						}
+						getPartName();
+					},
+					error : function() {
+						console.log("錯誤訊息");
+					}
+				});	
+			}			
+			function getPartName(){
+				$.ajax({
+					url : "QuestionnaireModuleServlet",
+					data : {
+						state : "getPartName",
+						questionnaireID : questionnaireID,
+					},
+					dataType : "json",
+					success : function(response) {
+						partName.length = 0;
+						partName[0] = "";
+						for(var i=0; i<response.length; i++){
+							partName[i] = response[i];
+						}
+						complete();
+					},
+					error : function() {
+						console.log("錯誤訊息");
+					}
+				});			
+			}
+			function complete(){
+				var questionString = "";
+				var num = 0;
+				var addScoring = 0;
+				var patientScoring = 0;
+				var highest = 0;
+				var tempScore = 0;
+				var patientTemp = "";
+				var doctorTemp = "";
+				for(var i=0; i<partName.length; i++){
+					if(partName[i] || i == 0 && partArray[i]){
+						if (partName[i])questionString += "<div class='panel panel-default "+color+"Question'><div class='panel-heading'>Part "+i+"："+partName[i]+"</div></div>";
+						var questions = partArray[i].split(",");
+						for (var j=0; j<questions.length; j++){
+							$.ajax({
+								url : "QuestionnaireModuleServlet",
+								data : {
+									state : "searchQuestion",
+									questionID : questions[j]
+								},
+								async:false,
+								dataType : "json",
+								success : function(response){
+									questionString += "<div class='panel panel-default "+color+"Question'>";
+									questionString += "<div class='panel-heading'>"+response[1]+"</div>";
+
+									questionString += "<div class='panel-body'>";
+									if(response[2]){
+										questionString += "<form>";
+										var obj = eval('(' + response[2] + ')');						
+										for (var j = 0; j < obj.length; j++) {
+											if(obj[j].score > tempScore){
+												tempScore = obj[j].score;										
+											}
+											if(color == "green"){
+												questionString += "<div>"+obj[j].score+" = "+obj[j].content+"</div>";
+												if(j == answerArray[num]){
+													addScoring += parseInt(obj[j].score);
+													doctorTemp = '<li class="list-group-item greenAnswer">'+obj[j].score+' = '+obj[j].content+'</li>';
+												}
+											}else{
+												if(j == answerArray[num]){
+													questionString += "<div class='radio'><label><input type='radio' disabled checked>"+obj[j].score+" = "+obj[j].content+"</label></div>";
+													addScoring += parseInt(obj[j].score);
+													doctorTemp = '<li class="list-group-item greenAnswer">'+obj[j].score+' = '+obj[j].content+'</li>';
+												}else{
+													questionString += "<div class='radio'><label><input type='radio' disabled>"+obj[j].score+" = "+obj[j].content+"</label></div>";					
+												}											
+											}
+										}
+										highest += tempScore;
+										tempScore = 0;
+										if (answerPatientArray.length) {
+											patientTemp = '<li class="list-group-item pinkAnswer">'+obj[answerPatientArray[num]].score+" = "+obj[answerPatientArray[num]].content+'</li>';
+											patientScoring += obj[answerPatientArray[num]].score;
+										}
+										questionString += "</form>";									
+									}else{
+										if (IDType == "un" || color == "green") questionString += "簡答題";
+										else questionString += answerArray[num];
+										if (answerPatientArray.length) patientTemp = '<li class="list-group-item pinkAnswer">'+answerPatientArray[num]+'</li>';
+										doctorTemp = '<li class="list-group-item greenAnswer">'+ answerArray[num]+'</li>';
+									}
+									
+									questionString += "</div></div>";
+									if(color == "green"){
+										questionString += '<div class="list-group list-group-horizontal" style="margin-top: 1vh; margin-bottom: 1vh;">';									
+										questionString += '<li class="list-group-item greenAnswer">後評答案</li>';
+										questionString += doctorTemp;
+										questionString += '</div>';																			
+										questionString += '<div class="list-group list-group-horizontal" style="margin-top: 1vh; margin-bottom: 2vh;">';
+										questionString += '<li class="list-group-item pinkAnswer">病患答案</li>';
+										questionString += patientTemp;
+										questionString += '</div>';
+									}
+									num += 1;
+								},
+								error : function() {									
+								}
+							});					
+						}
+					}	
+				}
+				if(IDType == "un"){
+					$("#questionList").empty().append('<div class="panel-heading" id="panelHeading">'+tempHeading+'</div><div class="panel-body" style="overflow-y: auto;"><div class="panel-group">'+questionString+'</div></div>');
+					//右邊灰框的panel-body高度
+					$(".right-content > .panel-body").css("height", $(".right-content").outerHeight() - $(".right-content > .panel-heading").outerHeight() - 20);		
+				}else{
+					if(scoring == "1" && color == "pink") $("#score").append(" <b>"+addScoring+"/"+highest+"</b>分");
+					else if(scoring == "1") {
+						doctorScoring = addScoring+"/"+highest+"分";
+						$("#score").empty().append("自評 <b>"+patientScoring+"/"+highest+"</b>分，後評 <b>"+addScoring+"/"+highest+"</b>分");
+					}
+					$("#questionList").empty().append('<div class="panel-body" style="overflow-y: auto;"><div class="panel-group">'+questionString+'</div></div>');
+					$(".right-content > .panel-body").css("height", $(".right-content").outerHeight() - 40);
+				}
+			}
+			function deleteModalShow(){
+				$("#deleteModal").modal("show");		
+			}
+			function deleteDoctorAnswer(){
+				$.ajax({
+					url : "PatientQuestionnaireServlet",
+					data : {
+						state : "deleteDoctorAnswer",
+						answerID : needID
+					},
+					success : function(response) {
+						window.location.href = 'PatientQuestionnaire.html';					
+					},
+					error : function() {
+						console.log("錯誤訊息");
+					}
+				});					
+			}
+			function newDoctorAnswer(){
+				var questionString = "";
+				var num = 0;
+				var temp = "";
+				for(var i=0; i<partName.length; i++){
+					if(partName[i] || i == 0 && partArray[i]){
+						if (partName[i])questionString += "<div class='panel panel-default greenQuestion'><div class='panel-heading'>Part "+i+"："+partName[i]+"</div></div>";
+						var questions = partArray[i].split(",");
+						for (var j=0; j<questions.length; j++){
+							$.ajax({
+								url : "QuestionnaireModuleServlet",
+								data : {
+									state : "searchQuestion",
+									questionID : questions[j]
+								},
+								async:false,
+								dataType : "json",
+								success : function(response){
+									questionString += "<div class='panel panel-default greenQuestion'>";
+									questionString += "<div class='panel-heading'>"+response[1]+"</div>";
+
+									questionString += "<div class='panel-body'>";
+									if(response[2]){
+										questionString += "<form>";
+										var obj = eval('(' + response[2] + ')');						
+										for (var j = 0; j < obj.length; j++) {
+											if(j == answerArray[num]){
+												questionString += "<div class='radio'><label><input class='editRadio' type='radio' name='q"+num+"' checked>"+obj[j].score+" = "+obj[j].content+"</label></div>";
+											}else{
+												questionString += "<div class='radio'><label><input class='editRadio' type='radio' name='q"+num+"' >"+obj[j].score+" = "+obj[j].content+"</label></div>";					
+											}
+										}
+										temp = '<li class="list-group-item pinkAnswer">'+obj[answerArray[num]].score+" = "+obj[answerArray[num]].content+'</li></div>';
+										questionString += "</form>";										
+									}else{						
+										questionString += "<input type='text' class='form-control editSelect' id='assayQuestion"+num+"' value='"+answerArray[num]+"'>";
+										temp = '<li class="list-group-item pinkAnswer">'+answerArray[num]+'</li></div>';
+									}
+									questionString += "</div></div>";
+									questionString += '<div class="list-group list-group-horizontal" style="margin-top: 1vh; margin-bottom: 2vh;">';
+									questionString += '<li class="list-group-item pinkAnswer">病患答案</li>';
+									questionString += temp;					
+									num += 1;
+								},
+								error : function() {									
+								}
+							});					
+						}
+					}	
+				}
+				questionCount = num;				
+				$("#questionList").empty().append('<div class="panel-body" style="overflow-y: auto;"><div class="panel-group">'+questionString+'</div></div>');
+				$(".right-content > .panel-body").css("height", $(".right-content").outerHeight() - 40);
+				$("#changeButton").empty().append('<div class="btn-group pull-right"><button type="button" class="btn btn-default" onclick="newAnswer()">儲存</button></div>');
+				//是否修改檢查
+				$("input[type='radio']").change(function() {		//偵測頁面上任一個checkbox有沒有被修改
+					changed = true;
+				});
+				$(".editSelect").change(function () {		//偵測頁面上任一個下拉式選單有沒有被修改
+					changed = true;
+				});	
+			}
+			function newAnswer(){
+				var doctorArray = [];
+				var successSave = 1;
+				for(var i=0; i<questionCount; i++){
+					if(document.getElementById("assayQuestion"+i)){
+						if($("#assayQuestion"+i).val()) doctorArray[i] = htmlEscapeCharacter($("#assayQuestion"+i).val());
+						else {modalGenerator("提示", "還有題目尚未填答");successSave = 0;break;}
+					}else{
+						doctorArray[i] = $("input[name=q"+i+"]:checked").index("input[name=q"+i+"]");
+					}
+				}
+				if(successSave){
+					$.ajax({
+						url : "PatientQuestionnaireServlet",
+						data : {
+							state : "newAnswer",
+							answerID : needID,
+							questionnaireID : questionnaireID,
+							doctorAnswer : JSON.stringify(doctorArray),
+							selfDescription : htmlEscapeCharacter(selfDescription)
+						},
+						success : function(response){
+							changed = false;
+							window.location.href = 'EditPatientQuestionnaire.html?num='+response;
+						},
+						error : function() {
+							console.log("錯誤訊息");
+						}
+					});
+				}					
+			}
+			function cancelQuestionnaire(){
+				$.ajax({
+					url : "PatientQuestionnaireServlet",
+					data : {
+						state : "cancelQuestionnaire",
+						unfilledID : needID
+					},
+					success : function(response){
+						localStorage.setItem('state', 'un');
+						window.location.href = 'PatientQuestionnaire.html';
+					},
+					error : function() {
+						console.log("錯誤訊息");
+					}
+				});				
+			}
+			function medicalRecord() {
+				$.ajax({
+					url : "PatientQuestionnaireServlet",
+					data : {
+						state : "getMedicalRecord",
+						questionnaireID : questionnaireID
+					},
+					dataType : "json",
+					success : function(response){
+						var medicalRecordString = response[0]+"，"+questionnaireName + " 如下：\n";
+						var temp = response[1].split("<,>");
+						for(var i=0; i<temp.length; i++){
+							if(temp[i].indexOf("題目病歷<：>")!= -1){
+								medicalRecordString += addQuestionMedicalRecord(temp[i].split("<：>")[1],temp[i].split("<：>")[2]=="<br>");
+								if(scoring == "1") medicalRecordString += "總分："+doctorScoring+"。\n";
+							}else if(temp[i] == "病患自述"){
+								if(selfDescription != "") medicalRecordString += "病患自述："+selfDescription;
+							}else{
+								if(temp[i]) medicalRecordString += temp[i];
+							}
+						}
+						$("#medicalRecordContent").empty().append(medicalRecordString);
+						$("#medicalRecordIsNull").empty();
+						$("#medicalRecordModal").modal("show");
+					},
+					error : function() {
+						console.log("錯誤訊息");
+					}
+				});
+			}
+			function addQuestionMedicalRecord(str,addBR){
+				var returnString = "";
+				var tempQuestionMR = "";
+				var num = 0;
+				for(var i=0; i<partArray.length; i++){
+					var questions = partArray[i].split(",");
+					for(var j=0; j<questions.length;j++){
+						$.ajax({
+							url : "QuestionnaireModuleServlet",
+							data : {
+								state : "searchQuestionMedicalRecord",
+								questionID : questions[j]
+							},
+							async:false,
+							dataType : "json",
+							success : function(response) {	
+								if(response[1]){	//病歷存在
+									var obj = new Object();
+									obj = JSON.parse(response[1]);
+									if(response[0]){	//單選
+										var option = eval('(' + response[0] + ')');	
+										if(obj.all=="true"){	//全選
+											if(obj[0]){
+												var temp = obj[0]+"";
+												temp = temp.split("<,>");
+												for(var k=0; k<temp.length; k++){
+													if(temp[k] == "病患選擇答案"){
+														tempQuestionMR += option[answerArray[num]].content;		
+													}else{
+														tempQuestionMR += temp[k];
+													}
+												}
+											}
+										}else{
+											if(obj[answerArray[num]+1]){
+												var temp = obj[answerArray[num]+1]+"";
+												temp = temp.split("<,>");
+												for(var l=0; l<temp.length; l++){
+													tempQuestionMR += temp[l];
+												}
+											}
+										}						
+									}else{	//簡答
+										if(obj[0]){
+											var temp = obj[0]+"";
+											temp = temp.split("<,>");
+											for(var k=0; k<temp.length; k++){
+												if(temp[k] == "病患輸入答案"){
+													tempQuestionMR += answerArray[num];		
+												}else{
+													tempQuestionMR += temp[k];
+												}
+											}
+										}										
+									}
+									num += 1;
+									if(tempQuestionMR){
+										returnString += tempQuestionMR+str;
+										if(addBR) returnString += "\n";
+										tempQuestionMR = "";
+									}
+								}							
+							},
+							error : function() {
+							}
+						});							
+					}
+				
+				}
+				return returnString;				
+			}
+			function sendMedicalRecord(){
+				if($('#medicalRecordContent').val()){
+					$("#medicalRecordModal").modal("hide");	
+					var temp = $('#medicalRecordContent').val().replace(/\n/g, "<br>");						
+					$.ajax({
+						url : "PatientMedicalRecordServlet",
+						data : {
+							state : "newMedicalRecord",
+							medicalRecord : htmlEscapeCharacter(temp)
+						},
+						success : function(response){
+							modalGenerator("提示", "新增成功");
+						},
+						error : function() {
+							console.log("錯誤訊息");
+						}
+					});				
+				}else{
+					$("#medicalRecordIsNull").empty().append("病歷不能為空");	
+				}
+			}
+			$(window).on("beforeunload", function() {
+				if(changed) return "尚有未儲存的修改。";
+			});
+			var clipboard = new Clipboard('.copyButton', {
+				text: function() {
+					return $('#medicalRecordContent').val();
+				}
+			});
+
+			clipboard.on('success', function(e) {
+				console.log(e);
+			});
+
+			clipboard.on('error', function(e) {
+				console.log(e);
+			});
+			//左邊灰框的panel-body高度
+			$(".left-list > .panel-body").css("min-height", "48vh");
+			$(".left-list > .panel-body").css("max-height", "48vh");
+		</script>
+	</body>
+</html>

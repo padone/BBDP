@@ -1,0 +1,203 @@
+﻿<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8"> 
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>BBDP</title>
+		<link rel="Shortcut Icon" type="image/x-icon" href="img/frame/icon.ico">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+		<link href="frame/metisMenu/metisMenu.css" rel="stylesheet">
+		<script src="frame/metisMenu/metisMenu.js"></script>
+		<link href="frame/sb-admin-2/sb-admin-2.css" rel="stylesheet">
+		<script src="frame/sb-admin-2/sb-admin-2.js"></script>
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+		<!-- 醫生端框架 css -->
+		<link href="css/doctorFrame.css" rel="stylesheet">
+		<!-- C3.js相關 -->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/c3/0.4.10/c3.min.js"></script>
+		<link href="https://cdnjs.cloudflare.com/ajax/libs/c3/0.4.10/c3.min.css" rel="stylesheet">
+	</head>
+	<body>
+		<div id="wrapper">
+			<!-- prepend navbar in doctorFrame.js -->
+			<div id="page-wrapper">
+				<div class="row">
+					<!-- prepend nav-tabs in patientInformationFrame.js -->
+					<!-- 內容 -->
+				</div>
+				<div class="row" style="margin-top: 3vh;">
+					<div class="col-md-6 col-sm-12">
+						<div id="upperLeft" class="panel panel-default left-list">
+							<div class="panel-heading">
+								<div class="media">
+									<div id="patientPicture" class="media-left media-middle">
+										<img src="img/frame/user.png" class="media-object" style="width: 60px">
+									</div>
+									<div class="media-body">
+										<h3 id="patientName">&nbsp&nbsp&nbsp病患姓名</h3>
+									</div>
+								</div>
+								<!-- <div class="row">
+									<div class="col-md-4 col-sm-4 col-xs-4">
+										<div id="patientPicture">
+											<img class="img-responsive" style="max-height: 8vh;" src="img/frame/user.png" />
+										</div>
+									</div>
+									<div class="col-md-8 col-sm-8 col-xs-8">
+										<h3 id="patientName">病患姓名</h3>
+									</div>
+								</div> -->
+							</div>
+							<div class="panel-body">
+								<div class="table-responsive">
+									<table class="table table-hover table-bordered" style="margin-bottom: 0;">
+										<tbody>
+											<tr>
+												<td style="border-color: white; background-color: #c2eabd;">性別</td>
+												<td id="patientGender" style="border-color: #c2eabd;">男</td>
+											</tr>
+											<tr>
+												<td style="border-color: white; background-color: #c2eabd;">出生日期</td>
+												<td id="patientBirth" style="border-color: #c2eabd;">1960-01-01 (57歲)</td>
+											</tr>
+											<tr>
+												<td style="border-color: white; background-color: #c2eabd;">身分證字號</td>
+												<td id="patientIdentityNumber" style="border-color: #c2eabd;">A123456789</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-3 col-sm-6">
+						<div class="panel panel-default left-list upperRight">
+							<div class="panel-heading">最近一個月的問卷</div>
+							<div class="panel-body">
+								<div class="row">
+									<b id="recentQuestionnaireNum" style="padding-left: 1vw; color: #ed254e; font-size: 500%;">0</b>
+									<span class="text-right" >份問卷</span>
+								</div>
+							</div>
+							<a href="PatientQuestionnaire.html">
+								<div class="panel-footer" style="background-color: white;">
+									<span class="pull-left" style="color: black;">詳細資料</span>
+									<span class="pull-right" style="color: black;"><i class="fa fa-arrow-circle-right"></i></span>
+									<div class="clearfix"></div>
+								</div>
+							</a>
+						</div>
+					</div>
+					<div class="col-md-3 col-sm-6">
+						<div class="panel panel-default left-list upperRight">
+							<div class="panel-heading">最近一個月的檔案夾</div>
+							<div class="panel-body">
+								<div class="row">
+									<div>
+										<b id="recentFolderNum" style="padding-left: 1vw; color: #f9dc5c; font-size: 500%;">0</b>
+										<span class="text-right">個檔案</span>
+									</div>
+								</div>
+							</div>
+							<a href="PatientFolder.html">
+								<div class="panel-footer" style="background-color: white;">
+									<span class="pull-left" style="color: black;">詳細資料</span>
+									<span class="pull-right" style="color: black;"><i class="fa fa-arrow-circle-right"></i></span>
+									<div class="clearfix"></div>
+								</div>
+							</a>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-7 col-sm-12">
+						<div class="panel panel-default left-list" style="min-height: 40vh; max-height: 40vh;">
+							<div class="panel-heading">
+								<div class="row">
+									<div class="col-md-8 col-sm-8">
+										最近一個月的健康狀況追蹤
+									</div>
+									<div class="col-md-4 col-sm-4">
+										<select id="recentHealthTrackingName" class="pull-right"></select>
+									</div>
+								</div>
+							</div>
+							<div id="healthTrackingBody" class="panel-body">
+								<div id="chart"></div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-5 col-sm-12">
+						<div id="lowerRight" class="panel panel-default left-list" style="margin-bottom: 2vh">
+							<div class="panel-heading">
+								<div class="row">
+									<div id="patientBasicMedicalRecordDate" class="col-md-10 col-sm-10">
+										病患最新問卷
+									</div>
+									<div class="col-md-2 col-sm-2">
+										<!-- 病患最新問卷的新增為病歷按鈕 -->
+										<button type="button" class="btn btn-xs btn-default pull-right" rel="tooltip" title="新增為病歷" onclick="newMedicalRecord()">新增</button>
+									</div>
+								</div>
+							</div>
+							<div id="patientBasicMedicalRecordContent" class="panel-body" style="overflow-y: scroll;"></div>
+							<a href="PatientQuestionnaire.html">
+								<div class="panel-footer" style="background-color: white;">
+									<span class="pull-left" style="color: black;">詳細資料</span>
+									<span class="pull-right" style="color: black;"><i class="fa fa-arrow-circle-right"></i></span>
+									<div class="clearfix"></div>
+								</div>
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<!-- 醫生端框架 js -->
+		<script src="js/doctorFrame.js"></script>
+		<!-- 病患資訊框架 js -->
+		<script src="js/patientInformationFrame.js"></script>
+		<!-- 病患資訊-基本資料-病歷 js -->
+		<script src="js/getPatientQuestionnaireMR.js"></script>
+		<!-- 病患資訊-基本資料 js -->
+		<script src="js/b64.js"></script>
+		<script src="js/patientBasicInformation.js"></script>
+		<!-- 計算高度 -->
+		<script>
+			//最近問卷/檔案
+			if($(window).width() >= 1097 && $(window).width() <= 1099 || $(window).width() >= 1107 && $(window).width() <= 1108) {
+				$(".upperRight").css("height", $("#upperLeft").outerHeight() - 20);
+			}
+			else if($(window).width() >= 1100 && $(window).width() <= 1106) {
+				$(".upperRight").css("height", $("#upperLeft").outerHeight() - 40);
+			}
+			else {
+				$(".upperRight").css("height", $("#upperLeft").outerHeight());
+			}
+			$(".upperRight > .panel-body").css("height", $(".upperRight").outerHeight() - $(".upperRight > .panel-heading").outerHeight() - $(".upperRight > a > .panel-footer").outerHeight() - 10);
+			//健康狀況追蹤panel-body
+			$("#healthTrackingBody").outerHeight($("#healthTrackingBody").parent().outerHeight() - $("#healthTrackingBody").parent().children().first().outerHeight());
+			//病歷
+			if($(window).width() >= 1097 && $(window).width() <= 1099 || $(window).width() >= 1107 && $(window).width() <= 1108) {
+				$("#lowerRight").css("height", $("#healthTrackingBody").parent().outerHeight() - 20);
+			}
+			else if($(window).width() >= 1100 && $(window).width() <= 1106) {
+				$("#lowerRight").css("height", $("#healthTrackingBody").parent().outerHeight() - 40);
+			}
+			else {
+				$("#lowerRight").css("height", $("#healthTrackingBody").parent().outerHeight());
+			}
+			$("#lowerRight > .panel-body").css("height", $("#lowerRight").outerHeight() - $("#lowerRight > .panel-heading").outerHeight() - $("#lowerRight > a > .panel-footer").outerHeight() - 10);
+		</script>
+		<!-- 提示說明tooltip -->
+		<script>
+			$(document).ready(function() {
+				 $("[rel=tooltip]").tooltip({placement: "left"});
+			});
+		</script>
+	</body>
+</html>

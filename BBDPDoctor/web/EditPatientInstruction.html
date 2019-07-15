@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8"> 
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>BBDP</title>
+		<link rel="Shortcut Icon" type="image/x-icon" href="img/frame/icon.ico">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+		<link href="frame/metisMenu/metisMenu.css" rel="stylesheet">
+		<script src="frame/metisMenu/metisMenu.js"></script>
+		<link href="frame/sb-admin-2/sb-admin-2.css" rel="stylesheet">
+		<script src="frame/sb-admin-2/sb-admin-2.js"></script>
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+		<!-- 醫生端框架 css -->
+		<link href="css/doctorFrame.css" rel="stylesheet">
+	</head>
+	<body>
+		<div id="wrapper">
+			<!-- prepend navbar in doctorFrame.js -->
+			<div id="page-wrapper">
+				<div class="row">
+					<!-- 內容 -->
+					<div class="col-md-12">
+						<div class="row">
+							<!-- 左邊灰框 -->
+							<div class="col-md-4" style="margin-top: 3vh; margin-bottom: 3vh;">
+								<div class="row">
+									<div class="col-md-12">
+										<button type="button" class="btn btn-default" onclick="location.href='NewPatientInstruction.html'">新增衛教資訊</button>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-12">
+										<br />
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-12">
+										<div class="panel panel-default left-list" style="min-height: 73vh; max-height: 73vh;">
+											<div class="panel-heading">
+												<form>
+													<!-- 左邊灰框上面的選單 -->
+													<select class="form-control" id="type1" onChange="changeType1(this.selectedIndex);">
+														<option value="all">衛教資訊分類</option>
+													</select>	
+												</form>
+											</div>
+											<div class="panel-body" style="overflow-y: auto;">
+												<div class="list-group" id="blueDiv">
+													<!-- 左邊灰框下面的項目(動態產生) 
+													<a href="EditPatientInstruction.html" class="list-group-item left-list-item patientInstruction">
+														<h4 class="list-group-item-heading">巴金森氏病介紹</h4>
+														<p class="list-group-item-text text-right">2017-01-05 20:30</p>
+													</a>
+													<a href="EditPatientInstruction.html" class="list-group-item left-list-item patientInstruction">
+														<h4 class="list-group-item-heading">如何照顧失智家人</h4>
+														<p class="list-group-item-text text-right">2017-01-03 17:45</p>
+													</a>
+													<a href="EditPatientInstruction.html" class="list-group-item left-list-item patientInstruction">
+														<h4 class="list-group-item-heading">腦髓漸空（老年失智症）預防保健</h4>
+														<p class="list-group-item-text text-right">2017-01-02 13:22</p>
+													</a>-->
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-8" style="margin-top: 3vh; margin-bottom: 3vh;">
+								<div class="row">
+									<div class="col-md-9 col-sm-9 col-xs-9">
+										<!-- 右邊灰框上面的湖水綠色的標題 -->
+										<div class="list-group list-group-horizontal">
+											<li class="list-group-item patientInstructionTitle" id="title" style="background-color: #A2E8DD; border: 1px solid #A2E8DD;"><!-- 巴金森氏病介紹 --></li>
+											<li class="list-group-item patientInstructionTitle" id="date" style="background-color: white; border: 1px solid #A2E8DD;"><!-- 2017-01-05 20:30 --></li>
+										</div>
+									</div>
+									<div class="col-md-3 col-sm-3 col-xs-3">
+										<!-- 右上角的按鈕 -->
+										<div class="btn-group pull-right">
+											<button type="button" class="btn btn-default" onclick="goToEdit()">編輯</button>
+											<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+												<span class="caret"></span>
+											</button>
+											<ul class="dropdown-menu" role="menu">
+												<li onclick="goToComment()"><a href="#">管理留言</a></li>
+												<li onclick="$('#editRecordModal').modal('show');"><a href="#">查看編輯紀錄</a></li>
+												<li onclick="deleteInstruction()"><a href="#">刪除</a></li>
+											</ul>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-12">
+										<br />
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-12">
+										<!-- 右邊灰框 -->
+										<div class="panel panel-default right-content" style="min-height: 73vh; max-height: 73vh; overflow-y: auto;">
+											<div class="panel-body" style="overflow-y: auto;" id="html">
+												<!-- 右邊灰框裡的文章內容 
+												<p><strong><span style="color: rgb(44, 130, 201); font-size: 24px;">巴金森氏病介紹</span></strong></p>
+												<hr>
+												<p style="margin-left: 20px;">
+													巴金森氏病是一種神經退化的疾病，臨床上以行動緩慢、肢體僵硬及顫抖等運動障礙為主。
+													許多腦部病變或藥物，亦有可能造成類似巴金森氏病的症狀。
+													人體每一大腦半球內有ㄧ個特殊結構，叫基底核負責動作之協調，其組成包括紋狀體、豆核、視丘下核、黑質核。
+													而紋狀體將大腦皮質產生的動機轉化成意識運動，其正常功能受大腦皮質分泌乙膽鹼 (acetylcholine Ach) 及黑質核分泌多巴胺 (Dopamine) 調節，
+													如果Ach/ Dopamine比率異常，則引起運動過度或過低之相關疾病。
+												</p>
+												<hr>
+												<p style="margin-left: 20px;"><span style="font-size: 18px; color: rgb(184, 49, 47);"><strong>臨床表徵</strong></span></p>
+												<ul>
+													<li>臨床上多以僵硬、震顫、動作徐緩三大症狀來做鑑別診斷</li>
+													<li>面部表情呆滯、流口水、駝背</li>
+													<li>缺乏姿勢性反射</li>
+													<li>蹣跚及拖曳步態</li>
+												</ul>
+												<hr>
+												<p style="margin-left: 20px;"><span style="font-size: 18px; color: rgb(184, 49, 47);"><strong>醫療處置<br></strong></span></p>
+												<ul>
+													<li>藥物治療：巴金森氏病的症狀，主要是因為紋狀體內 Dopamine 的量不足而引起，所以藥物的治療方向為增加腦內的 Dopamine 作用。</li>
+													<li>外科手術治療：可以減輕震顫及僵硬的症狀，但不會改變巴金森氏病的病程。適用於嚴重度較高且經過嚴格篩選的病人</li>
+													<li>物理治療：對於巴金森氏病，物理治療是很有效的，其運動包括:
+														<ul>
+															<li>深呼吸以促進肺容量。</li>
+															<li>維持發聲 5 秒鐘，可促進顏面的控制與表情。</li>
+															<li>大聲閱讀，有助於病人發覺自己的發聲語調，是較能調整自己的聲調。</li>
+															<li>唱初音階，可以改進音階的抑揚。</li>
+															<li>把舌頭伸出抵向鼻子、下巴及兩旁，促進舌頭的控制。</li>
+															<li>全身的關節範圍運動，因為持續的每日運動可以增加肌肉的力量，減輕僵直，以維持關節活動。</li>
+														</ul>
+													</li>
+												</ul>
+												<hr>
+												<p style="margin-left: 20px;"><strong><span style="font-size: 18px; color: rgb(184, 49, 47);">結語</span></strong></p>
+												<p style="margin-left: 20px;">巴金森氏病為老人常見的疾病之一，由於平均壽命的延長，老年人口增加，使得患病的人數也相對增加，此病不但影響了患者個人的生活品質，也增加家屬照顧負荷，進一步更導致社會國家資源的龐大負擔，所以對於此疾病，我們更應正視及瞭解。</p>
+												<hr> -->
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>			
+				</div>
+			</div>
+		</div>
+		
+		<!-- 編輯紀錄modal-->
+		<div id="editRecordModal" class="modal fade" role="dialog">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+						<h4 class="modal-title">編輯紀錄</h4>
+					</div>
+					<div class="modal-body">
+						<div class="panel panel-default" style="border: 1px solid #A2E8DD;">
+							<div class="panel-heading" style="background-color: #A2E8DD; border: 1px solid #A2E8DD;">文章發佈時間</div>
+							<div class="panel-body" id="firstDate"><!-- 2017-08-09 15:22 --></div>
+						</div>
+						<div class="panel panel-default" style="border: 1px solid #A2E8DD;">
+							<div class="panel-heading" style="background-color: #A2E8DD; border: 1px solid #A2E8DD;">最後修改時間</div>
+							<div class="panel-body" id="lastDate"><!-- 2017-08-09 20:45 --></div>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">關閉</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<script src="js/modalGeneratorCancel.js"></script>	<!-- modalGeneratorCancel.js-->
+		<script src="js/modalGenerator.js"></script>		<!-- modalGenerator.js-->
+		
+		<!--  醫生端框架 js -->
+		<script src="js/doctorFrame.js"></script>
+		<!-- 計算高度 -->
+		<script>
+			//左邊灰框的panel-body高度
+			$(".left-list > .panel-body").css("min-height", "60vh");
+			$(".left-list > .panel-body").css("max-height", "60vh");
+			//編輯紀錄modal高度
+			$("#editRecordModal").on("show.bs.modal", function() {
+				$(".modal .modal-body").css("overflow-y", "auto"); 
+				$(".modal .modal-body").css("max-height", $(window).height() * 0.7);
+			});
+		</script>
+		
+		<script src="js/editPatientInstruction.js"></script>	<!-- editPatientInstruction.js-->
+		<script src="js/patientInstruction.js"></script>		<!-- patientInstruction.js-->
+		
+	</body>
+</html>

@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8"> 
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>BBDP</title>
+		<link rel="Shortcut Icon" type="image/x-icon" href="img/frame/icon.ico">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+		<link href="frame/metisMenu/metisMenu.css" rel="stylesheet">
+		<script src="frame/metisMenu/metisMenu.js"></script>
+		<link href="frame/sb-admin-2/sb-admin-2.css" rel="stylesheet">
+		<script src="frame/sb-admin-2/sb-admin-2.js"></script>
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+		<!-- 醫生端框架 css -->
+		<link href="css/doctorFrame.css" rel="stylesheet">
+		<!-- 圖片自動剪裁 css -->
+		<style type="text/css">
+			#photo{
+				width: 64px;
+				height: 64px;
+				object-fit: cover;
+			}
+		</style>
+		<script type="text/JavaScript">
+		var imgArray = [];
+		var imgSmallArray = [];
+		var videoArray = [];
+		var timeArray = [];
+		var descriptionArray = [];
+		var fileAmount;
+		var fileYear = [];
+		var fileMonth = [];
+		var fileYearMonth = [];
+		var uniqueYear= [];
+		var uniqueYearMonth= [];
+		var uniquePhotoYear= [];
+		var uniquePhotoYearMonth= [];
+		var uniqueVideoYear= [];
+		var uniqueVideoYearMonth= [];
+	
+		//var serverURL = "http://localhost:8080/BBDPDoctor/";
+		//var serverURL = "http://140.121.197.130:8000/BBDPDoctor/";
+		var fileServerURL = "http://140.121.197.130:8600/BBDPFolderServer/FolderServlet";
+		//var fileServerURL = "http://localhost:8080/BBDPFolderServer/FolderServlet";	
+		
+		var url = decodeURI(window.location.href);
+		
+		var time = url.split("?")[1].split("=")[1];
+		
+
+		$(document).ready(function(){
+			$.getScript("js/judgeLogin.js");		//判斷登入
+			//initialPhotoList();
+			getSession();
+		});
+
+		var patientID;
+		var	doctorID;
+			
+		function getSession(){
+			$.ajax({
+				type: "GET",
+				url: "GetSessionServlet",	 
+				data: {option:"getSession"},
+				dataType: "json",
+													
+				success : function(response){
+					patientID = response[0]["patientID"];
+					doctorID = response[0]["doctorID"];
+					initialPhotoList();	
+					showSelectFile();
+				},
+			 
+				error : function(){
+					console.log("GetSessionServlet沒有回應");
+				}
+			});
+		}	
+			
+		//顯示選擇的檔案
+		function showSelectFile(){
+			$.ajax({
+			type: "GET",
+			url: fileServerURL,	 
+			data: {option:"getSelectFileInfo", patientID:patientID, time:time},
+			dataType: "json",
+												
+			success : function(response){
+				$("#selectFile").empty();
+				if(response.length>0){		//檔案存在
+					var selectVideo = response[0]["video"];
+					var selectDescription = response[0]["description"];
+					var selectTime = response[0]["time"];
+					//alert(selectVideo+" "+selectDescription+" "+selectTime);
+					var item = "";
+
+					if(selectVideo=='null'||selectVideo==''){	//圖片
+						item = "<center><img class='img-responsive' src='"+fileServerURL+"?patientID="+patientID+"&time=" + selectTime + "&option=getPhoto' style='height: 50vh;' /></center>";
+					}
+					else{	//影片
+						item = "<center>"+
+								"<video style='height: 50vh;' controls playsinline>" + 
+								"<source src='"+fileServerURL+"?option=getVideo&videoPath=" + selectVideo + "' >"+
+								"Your browser does not support the video tag."+
+								"</video>"+
+								"</center>";
+					}
+					$("#selectFile").append(item);
+				
+					$("#selectFileTime").empty();
+					$("#selectFileTime").append(selectTime.substr(0,19));
+					$("#selectFileDescription").empty();
+					$("#selectFileDescription").append(selectDescription);
+				}
+				else{			//檔案不存在
+					$("#selectFile").append("<center><img class='img-responsive' src='img/patientFolder/remove.png' style='height: 50vh;' /></center>");
+					$("#selectFileTime").empty();
+					$("#selectFileDescription").empty();
+					$("#selectFileDescription").append("檔案已被刪除");
+				}
+			},
+		 
+			error : function(){
+				console.log("server沒有回應");
+			}
+		});
+		}
+
+		function initialPhotoList(){
+			$.ajax({
+				type: "GET",
+				url: fileServerURL,	 
+				data: {option:"getDoctorFileInfo", patientID:patientID, doctorID:doctorID},
+				dataType: "json",
+													
+				success : function(response){
+					showPhotoList(response);	
+				},
+			 
+				error : function(){
+					console.log("server沒有回應");
+				}
+			});
+		}
+		
+		function showPhotoList(response){
+			fileAmount = response.length;
+			var jsonString = "";
+			$("#photoList").empty();
+			var output = "";
+			for(var i = 0; i<fileAmount; i++){ 
+				patientID = response[i]["patientID"];
+				timeArray[i] = response[i]["time"];
+				descriptionArray[i] = response[i]["description"];
+				imgArray[i] = fileServerURL + "?patientID=" + patientID + "&time=" + timeArray[i] + "&option=getPhoto";
+				imgSmallArray[i] = fileServerURL + "?patientID=" + patientID + "&time=" + timeArray[i] + "&option=getSmallPhoto";
+				videoArray[i] = response[i]["video"];
+							
+				var dateString = timeArray[i].substr(0,19);
+				var date = new Date(dateString.replace(/-/g,'/')); 	// "2012/01/01 12:30:10"
+													
+				fileYear[i] = Number(date.getFullYear());			//年份轉整數
+				fileMonth[i] = Number(date.getMonth()) + 1;			//月份轉整數
+				fileYearMonth[i] = fileYear[i] + "/" + fileMonth[i];
+							
+				if(videoArray[i]=='null'||videoArray[i]==''){		
+					output += photoItem(i);			//顯示照片
+				}else{	
+					output += videoItem(i);			//顯示影片
+				}							
+				jsonString += "patientID:"+patientID+ " time:" +response[i]["time"]+"\n" + "video:" +response[i]["video"]+"\n";
+			}
+			//alert(jsonString);
+			$("#photoList").append(output);
+			//找不同年跟月
+			initialUniqueTime();				
+		}
+		
+
+		//列表裡的項目
+		function photoItem(i){
+			var description = "";
+			if(descriptionArray[i].length > 16) {
+				description = descriptionArray[i].substring(0, 16) + "...";
+			}
+			else{
+				description = descriptionArray[i];
+			}
+			
+			var item = "";				
+
+			item = "<a href='#' onclick = 'showPhoto("+i+")' class='list-group-item left-list-item patientFolder'>" +
+						"<div class='media'>" +
+							"<div class='media-left media-top'>" +
+								"<img id='photo' src='" + imgSmallArray[i] + "' class='media-object' >" +
+							"</div>" +
+							"<div class='media-body'>" +
+								"<h4 class='list-group-item-heading'>" + timeArray[i].substr(0,19) + "</h4>" +
+								"<p>" + description + "</p>" +
+							"</div>" +
+						"</div>" +
+					"</a>";
+					
+			return item;
+		}
+		
+		function videoItem(i){
+			var description = "";
+			if(descriptionArray[i].length > 16) {
+				description = descriptionArray[i].substring(0, 16) + "...";
+			}
+			else{
+				description = descriptionArray[i];
+			}
+		
+			var item = "";			
+			item = "<a href='#'onclick = 'showVideo("+i+")' class='list-group-item left-list-item patientFolder'>" +
+						"<div class='media'>" +
+							"<div class='media-left media-top'>" +
+								"<img id='photo' src='" + imgSmallArray[i] + "' class='media-object' style='width: 64px;'>" +
+							"</div>" +
+							"<div class='media-body'>" +
+								"<h4 class='list-group-item-heading'>" + timeArray[i].substr(0,19) + "</h4>"+
+								"<p>" + description + "</p>" +
+							"</div>" +
+						"</div>"+
+					"</a>";
+			return item;
+		}
+		
+		function showVideo(i) {
+			window.location.href = 'EditPatientFolder.html?time='+timeArray[i];
+	    }
+			
+		function showPhoto(i) {
+			window.location.href = 'EditPatientFolder.html?time='+timeArray[i];
+	    }
+			
+		//找不同年跟月
+		function initialUniqueTime(){
+			for(var i = 0 ; i < fileAmount; i ++){					
+				if(videoArray[i]==''){		
+					uniquePhotoYear.push(fileYear[i]);
+					uniquePhotoYearMonth.push(fileYear[i] + "/" + fileMonth[i]);	
+				}
+				else{
+					uniqueVideoYear.push(fileYear[i]);
+					uniqueVideoYearMonth.push(fileYear[i] + "/" + fileMonth[i]);
+				}
+			}
+			uniqueYear = GetUnique(fileYear);
+			uniqueYearMonth = GetUnique(fileYearMonth);
+			uniquePhotoYear = GetUnique(uniquePhotoYear);
+			uniquePhotoYearMonth = GetUnique(uniquePhotoYearMonth);
+			uniqueVideoYear = GetUnique(uniqueVideoYear);
+			uniqueVideoYearMonth = GetUnique(uniqueVideoYearMonth);
+		}
+		
+		//選檔案類型	
+		function changeFileType(){
+			$("#photoList").empty();
+			//清空下面的選單			
+			$("#detailTime").empty();
+			$("#selectTime").empty();
+			
+			var output = "";		
+			var option = "<option value='allDetailTime'>所有時間</option>";
+			$("#detailTime").append(option);
+					
+			option = "<option value=''>請選擇</option>"+
+					"<option value='year'>年</option><option value='month'>年/月</option>";	
+			$("#selectTime").append(option);
+					
+			for(var i = 0 ; i < fileAmount; i ++){
+				output += filterResult(i);		
+			}
+			$("#photoList").append(output);
+				
+		}
+			
+		function changeTime(){
+			var output = "";
+
+			$("#detailTime").empty();
+
+			var option = "<option value='allDetailTime'>所有時間</option>";
+			
+			if($('#fileType option:selected').val()=='all' && $('#selectTime option:selected').val()=='year'){		//選擇全部跟年		
+				for(var i = 0; i < uniqueYear.length ; i++){
+					option += "<option value='"+ uniqueYear[i] +"'>"+uniqueYear[i]+"</option>";				
+				}						
+				$("#detailTime").append(option);
+			}
+			else if($('#fileType option:selected').val()=='all' && $('#selectTime option:selected').val()=='month'){	//選擇全部跟年月			
+				for(var i = 0; i < uniqueYearMonth.length ; i++){				
+						option += "<option value='" + uniqueYearMonth[i] + "'>" + uniqueYearMonth[i]+ "</option>";		
+				}						
+				$("#detailTime").append(option);
+			}
+			else if($('#fileType option:selected').val()=='photo' && $('#selectTime option:selected').val()=='year'){	//選擇照片跟年			
+				for(var i = 0; i < uniquePhotoYear.length ; i++){				
+					option += "<option value='" + uniquePhotoYear[i] + "'>" + uniquePhotoYear[i]+ "</option>";		
+				}						
+				$("#detailTime").append(option);
+				
+			}
+			else if($('#fileType option:selected').val()=='photo' && $('#selectTime option:selected').val()=='month'){	//選擇照片跟年月			
+				for(var i = 0; i < uniquePhotoYearMonth.length ; i++){				
+					option += "<option value='" + uniquePhotoYearMonth[i] + "'>" + uniquePhotoYearMonth[i]+ "</option>";		
+				}						
+				$("#detailTime").append(option);			
+			}	
+			else if($('#fileType option:selected').val()=='video' && $('#selectTime option:selected').val()=='year'){	//選擇影片跟年			
+				for(var i = 0; i < uniqueVideoYear.length ; i++){				
+					option += "<option value='" + uniqueVideoYear[i] + "'>" + uniqueVideoYear[i]+ "</option>";		
+				}						
+				$("#detailTime").append(option);
+				
+			}
+			else if($('#fileType option:selected').val()=='video' && $('#selectTime option:selected').val()=='month'){	//選擇影片跟年月			
+				for(var i = 0; i < uniqueVideoYearMonth.length ; i++){				
+					option += "<option value='" + uniqueVideoYearMonth[i] + "'>" + uniqueVideoYearMonth[i]+ "</option>";		
+				}						
+				$("#detailTime").append(option);			
+			}		
+			else{
+				$("#detailTime").append(option);
+			}
+		}	
+		
+		//選擇時間
+		function changeDetailTime(){
+			$("#rightDiv").empty();
+			$("#photoList").empty();
+			
+			var output = "";
+			for(var i = 0 ; i < fileAmount; i ++){
+				var year = fileYear[i];
+				var yearMonth = fileYear[i] +"/"+ fileMonth[i];
+				
+				if($('#detailTime option:selected').val() =="allDetailTime" ){	//選所有時間
+					output += filterResult(i);			
+				}
+			
+				if($('#detailTime option:selected').val().length == 4 && year == $('#detailTime option:selected').val()){	//選年份
+					output += filterResult(i);
+				}
+
+				if($('#detailTime option:selected').val().length > 4&& yearMonth == $('#detailTime option:selected').val()){	//選年月
+					output += filterResult(i);
+				}
+				
+			}
+			$("#photoList").append(output);
+		}
+		
+		function filterResult(i){
+			var result = "";
+			if(videoArray[i]==''&& $('#fileType option:selected').val()=='photo'){		//選照片
+				result = photoItem(i);		
+			}
+			else if(videoArray[i]!=''&& $('#fileType option:selected').val()=='video'){	//選影片
+				result = videoItem(i);		
+			}
+			else if($('#fileType option:selected').val()=='all'){ //選全部
+				if(videoArray[i]==''){
+					result = photoItem(i);
+				}
+				else{
+					result = videoItem(i);
+				}
+			}
+			return 	result;		
+		}
+		
+		function GetUnique(inputArray) {
+			var outputArray = [];
+			for (var i = 0; i < inputArray.length; i++) {
+				if ((jQuery.inArray(inputArray[i], outputArray)) == -1) {
+					outputArray.push(inputArray[i]);
+				}
+			}
+			return outputArray;
+		}
+		
+	</script>
+	</head>
+	<body>
+		<div id="wrapper">
+			<!-- prepend navbar in doctorFrame.js -->
+			<div id="page-wrapper">
+				<div class="row">
+					<!-- 內容 -->
+					<div class="col-md-12">
+						<div class="row">
+							<!-- 左邊灰框 -->
+							<div class="col-md-4" style="margin-top: 3vh; margin-bottom: 3vh;">
+								<div class="row">
+									<div class="col-md-12">
+										<div class="panel panel-default left-list" style="min-height: 75vh; max-height: 75vh;">
+											<div class="panel-heading">
+												<!-- 左邊灰框上面的選單 -->
+												<div class="form-group row" style="margin-bottom: 0;">
+													<div class="col-md-6 col-sm-6">
+														<select class="form-control" id="fileType" onChange="changeFileType()">
+															<option value="all">全部</option>
+															<option value="photo">照片</option>
+															<option value="video">影片</option>
+														</select>
+													</div>
+												</div>						
+												<div class="form-group row" style="margin-bottom: 0;">
+													<div class="col-md-6 col-sm-6" style="margin-bottom: 0.5vh; margin-top: 0.5vh;">
+														<select class="form-control" id="selectTime" onChange="changeTime()">
+															<option value="">請選擇</option>
+															<option value="year">年</option>
+															<option value="month">月</option>
+														</select>
+													</div>
+													<div class="col-md-6 col-sm-6" style="margin-bottom: 0.5vh; margin-top: 0.5vh;">
+														<select class="form-control" id="detailTime" onChange="changeDetailTime()">
+															<option value="allDetailTime">所有時間</option>
+														</select>
+													</div>
+												</div>
+											</div>
+											<div id="photoList" class="panel-body" style="overflow-y: auto;">
+												<div class="list-group">
+													<!-- 左邊灰框下面的項目(動態產生) 
+													<a href="EditPatientFolder.html" class="list-group-item left-list-item patientFolder">
+														<div class="media">
+															<div class="media-left media-top">
+																<img src="img/patientFolder/picture.png" class="media-object" style="width: 64px;">
+															</div>
+															<div class="media-body">
+																<h4 class="list-group-item-heading">2017-04-23 12:31</h4>
+																<p>行動遲緩、四肢僵硬、手腳顫抖</p>
+															</div>
+														</div>
+													</a>
+													<a href="EditPatientFolder.html" class="list-group-item left-list-item patientFolder">
+														<div class="media">
+															<div class="media-left media-top">
+																<img src="img/patientFolder/video.png" class="media-object" style="width: 64px;">
+															</div>
+															<div class="media-body">
+																<h4 class="list-group-item-heading">2017-04-21 12:00</h4>
+																<p>手抖</p>
+															</div>
+														</div>
+													</a>
+													-->
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-8" style="margin-top: 3vh; margin-bottom: 3vh;">
+								<div class="row">
+									<div class="col-md-12">
+										<!-- 右邊灰框 -->
+										<div class="panel panel-default right-content" style="min-height: 75vh; max-height: 75vh;">
+											<div id="selectFile" class="panel-body">
+												<!-- 右邊上面的大圖或影片--> 
+												<center><img class="img-responsive" src="" style="height: 50vh;" /></center>
+											</div>
+											<div class="panel-footer" style="background-color: white; overflow-y: auto;">
+												<!-- 右邊下面的時間和描述-->
+												<h4><b id="selectFileTime"></b></h4>
+												<h4 id="selectFileDescription"></h4> 
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<!-- 醫生端框架 js -->
+		<script src="js/doctorFrame.js"></script>
+		<!-- 病患資訊框架 js -->
+		<script src="js/patientInformationFrame.js"></script>
+		<!-- 計算高度 -->
+		<script>
+			//左邊灰框的panel-body高度
+			$(".left-list > .panel-body").css("min-height", "53vh");
+			$(".left-list > .panel-body").css("max-height", "53vh");
+			//右邊灰框的panel-footer高度
+			$(".right-content > .panel-footer").css("height", $(".right-content").outerHeight() - $(".right-content > .panel-body").outerHeight() - 20);
+		</script>
+	</body>
+</html>

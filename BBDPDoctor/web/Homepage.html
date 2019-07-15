@@ -1,0 +1,115 @@
+﻿<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8"> 
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>BBDP</title>
+		<link rel="Shortcut Icon" type="image/x-icon" href="img/frame/icon.ico">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+		<link href="frame/metisMenu/metisMenu.css" rel="stylesheet">
+		<script src="frame/metisMenu/metisMenu.js"></script>
+		<link href="frame/sb-admin-2/sb-admin-2.css" rel="stylesheet">
+		<script src="frame/sb-admin-2/sb-admin-2.js"></script>
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+		<!-- 醫生端框架 css -->
+		<link href="css/doctorFrame.css" rel="stylesheet">
+	</head>
+	<body>
+		<div id="wrapper">
+			<!-- prepend navbar in doctorFrame.js -->
+			<div id="page-wrapper">
+				<div class="row">
+					<!-- 內容 -->
+					<div class="col-md-4">
+						<div class="row">
+							<div class="col-md-12" style="margin-top: 3vh; margin-bottom: 3vh;">
+								<span class="lead" style="padding-left: 0.5vw;"><b>今日病患上傳問卷</b></span>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-12">
+								<div id="todayQuestionnairePanel" class="panel panel-default left-list" style="margin: 0;">
+									<div class="panel-heading">
+										<div class="row" style="padding-left: 1vw; padding-right: 2vw;">
+											<span class="label label-default" onclick="refreshQPanel()" style="cursor: pointer;">
+												<i class="fa fa-refresh"></i>
+												<span>重新整理</span>
+											</span>
+											<div class="pull-right">
+												<b id="todayQuestionnaireNum" style="padding-left: 1vw; color: #ed254e; font-size: 550%;">0</b>
+												<span class="text-right">份問卷</span>
+											</div>
+										</div>
+									</div>
+									<div class="panel-body" data-toggle='collapse' data-target="#QCollapse" onclick="clickQBody('show')" style="padding-top: 1vh; padding-bottom: 1vh; cursor: pointer;">
+										<span class="pull-left" style="color: black;">查看列表</span>
+										<span class="pull-right" style="color: black;"><i class="fa fa-arrow-circle-down"></i></span>
+										<div class="clearfix"></div>
+									</div>
+									<div id="QCollapse" class="panel-collapse collapse">
+										<div class="panel-footer" style="background-color: white; overflow: auto;">
+											<div class="list-group">
+												今日尚無問卷
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="row">
+							<div class="col-md-12" style="margin-top: 3vh; margin-bottom: 3vh;">
+								<span class="lead" style="padding-left: 0.5vw;"><b>今日病患上傳檔案</b></span>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-12">
+								<div id="todayFolderPanel" class="panel panel-default left-list" style="margin: 0;">
+									<div class="panel-heading">
+										<div class="row" style="padding-left: 1vw; padding-right: 2vw;">
+											<span class="label label-default" onclick="refreshFPanel()" style="cursor: pointer;">
+												<i class="fa fa-refresh"></i>
+												<span>重新整理</span>
+											</span>
+											<div class="pull-right">
+												<b id="todayFolderNum" style="padding-left: 1vw; color: #f9dc5c; font-size: 550%;">0</b>
+												<span class="text-right">個檔案</span>
+											</div>
+										</div>
+									</div>
+									<div class="panel-body" data-toggle='collapse' data-target="#FCollapse" onclick="clickFBody('show')" style="padding-top: 1vh; padding-bottom: 1vh; cursor: pointer;">
+											<span class="pull-left" style="color: black;">查看列表</span>
+											<span class="pull-right" style="color: black;"><i class="fa fa-arrow-circle-down"></i></span>
+											<div class="clearfix"></div>
+									</div>
+									<div id="FCollapse" class="panel-collapse collapse">
+										<div class="panel-footer" style="background-color: white; overflow: auto;">
+											<div class="list-group">
+												今日尚無檔案
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4"></div>
+				</div>
+			</div>
+		</div>
+		
+		<!-- 醫生端框架 js -->
+		<script src="js/doctorFrame.js"></script>
+		<!-- homepage js -->
+		<script src="js/homepage.js"></script>
+		<!-- 計算高度 -->
+		<script>
+			//左邊灰框的panel-body高度
+			$(".left-list > div > .panel-footer").css("min-height", "50vh");
+			$(".left-list > div > .panel-footer").css("max-height", "50vh");
+		</script>
+	</body>
+</html>

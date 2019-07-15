@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>BBDP</title>
+		<link rel="Shortcut Icon" type="image/x-icon" href="img/frame/icon.ico">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+		<link href="frame/metisMenu/metisMenu.css" rel="stylesheet">
+		<script src="frame/metisMenu/metisMenu.js"></script>
+		<link href="frame/sb-admin-2/sb-admin-2.css" rel="stylesheet">
+		<script src="frame/sb-admin-2/sb-admin-2.js"></script>
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+		<!-- 醫生端框架 css -->
+		<link href="css/doctorFrame.css" rel="stylesheet">
+		<script src="js/patientQuestionnaire.js"></script>
+	</head>
+	<body>
+		<div id="wrapper">
+			<!-- prepend navbar in doctorFrame.js -->
+			<div id="page-wrapper">
+				<div class="row">
+					<!-- 內容 -->
+					<div class="col-md-12">
+						<div class="row">
+							<!-- 左邊灰框 -->
+							<div class="col-md-4" style="margin-top: 3vh; margin-bottom: 3vh;">
+								<div class="row">
+									<div class="col-md-12">
+										<button type="button" class="btn btn-default" onclick="location.href='NewPatientQuestionnaire.html'" disabled>新增問卷</button>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-12">
+										<br />
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-12">
+										<div class="panel panel-default left-list" style="min-height: 68vh; max-height: 68vh;">
+											<div class="panel-heading">
+												<!-- 左邊灰框上面的選單 -->
+												<div class="form-group row" style="margin-bottom: 0;">
+													<div class="col-md-6 col-sm-6" style="margin-bottom: 0.5vh; margin-top: 0.5vh;">
+														<select class="form-control" id = "searchQuestionnaire">
+															<option value="all">全部 (已填寫)</option>
+															<option value="0">自評</option>
+															<option value="1">後評</option>
+															<option value="not">未填寫問卷</option>
+														</select>
+													</div>												
+													<div class="col-md-6 col-sm-6" style="margin-bottom: 0.5vh; margin-top: 0.5vh;">
+														<select class="form-control" id = "questionnaireType">
+															<option value="">問卷分類</option>
+														</select>
+													</div>
+												</div>	
+												<div class="form-group row" style="margin-bottom: 0;">
+													<div class="col-md-6 col-sm-6" style="margin-bottom: 0.5vh; margin-top: 0.5vh;">
+														<select class="form-control" id = "questionnaireDateRange">
+															<option value="">請選擇</option>
+															<option value="year">年</option>
+															<option value="month">月</option>
+														</select>
+													</div>
+													<div class="col-md-6 col-sm-6" style="margin-bottom: 0.5vh; margin-top: 0.5vh;">
+														<select class="form-control" id = "questionnaireDate">
+															<option value="">所有時間</option>
+														</select>
+													</div>
+												</div>
+											</div>
+											<div class="panel-body" style="overflow-y: auto;">
+												<div class="list-group" id = "questionnaireList">
+													<!-- 左邊灰框下面的項目(動態產生) -->
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-8" style="margin-top: 3vh; margin-bottom: 3vh;">
+								<div class="row">
+									<div class="col-md-12 col-sm-12 col-xs-12">
+										<!-- 右上角的按鈕 -->
+										<div class="btn-group pull-right">
+											<button type="button" class="btn btn-default" onclick="send()">送出</button>
+										</div>											
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-12">
+										<br />
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-12">
+										<!-- 右邊灰框 -->
+										<div class="panel panel-default right-content" style="min-height: 68vh; max-height: 68vh;">
+											<div class="panel-heading">
+												<div class="row" style="margin-left: 0.5vw;">
+													<h5><b>問卷模板</b></h5>
+												</div>
+												<div class="row">
+													<!-- 右邊灰框上面的問卷模板選單 -->
+													<div class="col-md-5 col-sm-6 col-xs-12" style="margin-bottom: 1vh;">
+														<select class="form-control" id="selectType" onChange="changeType()">
+															<option value="all">問卷模板分類</option>
+														</select>
+													</div>
+													<div class="col-md-5 col-sm-6 col-xs-12" style="margin-bottom: 1vh;">
+														<select class="form-control" id="selectQuestionnaire" onChange="changeQuestionnaire()">
+															<option value="">請選擇問卷</option>
+														</select>
+													</div>
+												</div>
+												<div class="row" style="margin-left: 0.5vw;">
+													<h5><b>週期</b></h5>
+												</div>
+												<!-- 右邊灰框上面的週期選單 -->
+												<div class="row" style="padding-right: 0;">
+													<div class="col-md-2 col-sm-2 col-xs-3" style="padding-right: 0;">
+														<input type="number" min="1" id="times" class="form-control" value="1" />
+													</div>
+													<div class="col-md-3 col-sm-3 col-xs-4" style="padding-right: 0;">
+														<select class="form-control" id="cycleType" >
+															<option value="天">天</option>
+															<option value="週">週</option>
+															<option value="月">月</option>
+														</select>
+													</div>
+													<div class="col-md-2 col-sm-2 col-xs-3" style="padding-right: 0;">
+														<h5>一次，</h5>
+													</div>
+												</div>
+												<div class="row" style="padding-right: 0; margin-top: 1vh;">
+													<div class="col-md-1 col-sm-1 col-xs-1" style="padding-right: 0; width: 20px;">
+														<h5>共</h5>
+													</div>
+													<div class="col-md-2 col-sm-2 col-xs-3" style="padding-right: 0;">
+														<input type="number" id="totalTimes" min="1" class="form-control" value="1" />
+													</div>
+													<div class="col-md-1 col-sm-1 col-xs-1">
+														<h5>次</h5>
+													</div>
+													<div class="checkbox pull-left">
+														<label style="font-weight: bold;">
+															<input type="checkbox" id="todayButton" checked>
+															包含今天
+														</label>
+													</div>
+												</div>
+											</div>
+											<div class="panel-body" style="overflow-y: auto;">
+												<div class="panel-group" id = "completeQuestionnaire" >
+												<!-- 右邊灰框下面的題目(動態產生) -->
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<!-- 醫生端框架 js -->
+		<script src="js/doctorFrame.js"></script>
+		<script src="js/modalGenerator.js"></script>
+		<!-- 病患資訊框架 js -->
+		<script src="js/patientInformationFrame.js"></script>
+		<!-- 計算高度 -->
+		<script>
+			var partName = [];
+			var partArray = [];
+			$(document).ready(function(){
+				$.ajax({
+					url : "QuestionnaireModuleServlet",
+					data : {
+						state : "searchType",					
+					},
+					dataType : "json",
+			
+					success : function(response) {
+						$("#selectType").empty();
+						var temp = "<option value='all'>問卷模板分類</option>";
+						for(var i=0; i<response.length; i++){
+							temp+="<option value='"+response[i]+"'>"+response[i]+"</option>";
+						}
+						$("#selectType").append(temp);
+					},
+					error : function() {
+						console.log("錯誤訊息");
+					}
+				});		
+				$.ajax({
+					url : "QuestionnaireModuleServlet",
+					data : {
+						state : "searchAllQuestionnaire",
+					},
+					dataType : "json",
+
+					success : function(response) {
+						$("#selectQuestionnaire").empty();
+						var temp = "<option value=''>請選擇問卷</option>";	
+						for(var i=0; i<response.length; i+=3){
+							temp += "<option value='"+response[i]+"'>"+response[i+1]+"</option>";
+						}
+						$("#selectQuestionnaire").append(temp);					
+					},
+					error : function() {
+						console.log("錯誤訊息");
+					}
+				});		
+			});	
+			function changeType(){
+				$("#completeQuestionnaire").empty();
+				var state = "searchQuestionnaire";
+				if($('#selectType option:selected').val()=="all") state = "searchAllQuestionnaire"
+
+				$.ajax({
+					url : "QuestionnaireModuleServlet",
+					data : {
+						state : state,
+						type : htmlEscapeCharacter($('#selectType option:selected').val())
+					},
+					dataType : "json",
+
+					success : function(response) {
+						$("#selectQuestionnaire").empty();
+						var temp = "<option value=''>請選擇問卷</option>";	
+						for(var i=0; i<response.length; i+=3){
+							temp += "<option value='"+response[i]+"'>"+response[i+1]+"</option>";
+						}
+						$("#selectQuestionnaire").append(temp);		
+					},
+					error : function() {
+						console.log("錯誤訊息");
+					}
+				});	
+			}
+			function changeQuestionnaire(){
+				if($('#selectQuestionnaire option:selected').val()){
+					$.ajax({
+						url : "QuestionnaireModuleServlet",
+						data : {
+							state : "getQuestionList",
+							questionnaireID : $('#selectQuestionnaire option:selected').val()
+						},
+						dataType : "json",
+						success : function(response) {
+							partArray.length = 0;
+							partArray[0] = "";
+							var tempPart = parseInt(response[0]);
+							partArray[tempPart] = response[1];
+							for(var i=2; i<response.length; i+=2){
+								if(tempPart != parseInt(response[i])){
+									partArray[parseInt(response[i])] = response[i+1];
+									tempPart = parseInt(response[i]);								
+								}else{
+									partArray[parseInt(response[i])] += ","+response[i+1];	
+								}				
+							}
+							getPartName();
+						},
+						error : function() {
+							console.log("錯誤訊息");
+						}
+					});
+				}else $("#completeQuestionnaire").empty();				
+			}
+			function getPartName(){
+				$.ajax({
+					url : "QuestionnaireModuleServlet",
+					data : {
+						state : "getPartName",
+						questionnaireID : $('#selectQuestionnaire option:selected').val(),
+					},
+					dataType : "json",
+					success : function(response) {
+						partName.length = 0;
+						partName[0] = "";
+						for(var i=0; i<response.length; i++){
+							partName[i] = response[i];
+						}
+						complete();	
+					},
+					error : function() {
+						console.log("錯誤訊息");
+					}
+				});			
+			}
+			function complete(){
+				$("#completeQuestionnaire").empty();
+				var questionString = "";
+				for(var i=0; i<partName.length; i++){
+					if(partName[i] || i == 0 && partArray[i]){
+						if (partName[i])questionString += "<div class='panel panel-default pinkQuestion'><div class='panel-heading'>Part "+i+"："+partName[i]+"</div></div>";
+						var questions = partArray[i].split(",");
+						for (var j=0; j<questions.length; j++){
+							$.ajax({
+								url : "QuestionnaireModuleServlet",
+								data : {
+									state : "searchQuestion",
+									questionID : questions[j]
+								},
+								async:false,
+								dataType : "json",
+								success : function(response){
+									questionString += "<div class='panel panel-default pinkQuestion'>";
+									questionString += "<div class='panel-heading'>"+response[1]+"</div>";
+									
+									questionString += "<div class='panel-body'>";
+									if(response[2]){
+										questionString += "<form>";
+										var obj = eval('(' + response[2] + ')');						
+										for (var j = 0; j < obj.length; j++) {
+											questionString += "<div class='radio'><label><input type='radio' disabled>"+obj[j].score+" = "+obj[j].content+"</label></div>";
+										}
+										questionString += "</form>";
+									}else{
+										questionString += "簡答題";
+									}
+									questionString += "</div></div>";
+								},
+								error : function() {									
+								}
+							});					
+						}
+					}	
+				}
+				$("#completeQuestionnaire").append(questionString);
+			}
+			function send(){
+				var today = 0; 
+				if($('#todayButton').is(":checked")) today = 1;
+				if($('#selectQuestionnaire option:selected').val()){
+					if($("#times").val() > 0 && $("#totalTimes").val() > 0){
+						$.ajax({
+							url : "PatientQuestionnaireServlet",
+							data : {
+								state : "newPatientQuestionnaire",
+								questionnaireID : $('#selectQuestionnaire option:selected').val(),
+								times : $("#times").val(),
+								cycleType : $("#cycleType option:selected").val(),
+								totalTimes : $("#totalTimes").val(),
+								today : today
+							},
+							dataType : "json",
+					
+							success : function(response) {
+								$("#selectType").val("all");
+								$("#selectQuestionnaire").val("");
+								$("#times").val(1);
+								$("#cycleType").val("天");
+								$("#totalTimes").val(1);
+								$("#todayButton").prop("checked", true);
+								$("#completeQuestionnaire").empty();
+								modalGenerator("提示", "新增成功");
+							},
+							error : function() {
+								console.log("錯誤訊息");
+							}
+						});
+					}else modalGenerator("提示", "數值輸入錯誤");
+				}else modalGenerator("提示", "請選擇問卷");
+			}
+			//左邊灰框的panel-body高度
+			$(".left-list > .panel-body").css("min-height", "46vh");
+			$(".left-list > .panel-body").css("max-height", "46vh");
+			//右邊panel-body高度
+			$(".right-content > .panel-body").outerHeight($(".right-content").outerHeight() - $(".right-content > .panel-heading").outerHeight() - 30);
+		</script>
+	</body>
+</html>

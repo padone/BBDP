@@ -1,0 +1,583 @@
+﻿* {
+	font-family: 微軟正黑體;
+	word-wrap: break-word;
+	word-break: break-all;
+}
+
+/*上方棕色navbar*/
+.navbar-default {
+  background-color: #56494e;
+  border-color: #776d71;
+}
+.navbar-default .navbar-brand {
+  color: #ffffff;
+}
+.navbar-default .navbar-brand:hover,
+.navbar-default .navbar-brand:focus {
+  color: #ffffff;
+}
+.navbar-default .navbar-text {
+  color: #ffffff;
+}
+.navbar-default .navbar-nav > li > a {
+  color: #ffffff;
+}
+.navbar-default .navbar-nav > li > a:hover,
+.navbar-default .navbar-nav > li > a:focus {
+  color: #ffffff;
+}
+.navbar-default .navbar-nav > .active > a,
+.navbar-default .navbar-nav > .active > a:hover,
+.navbar-default .navbar-nav > .active > a:focus {
+  color: #ffffff;
+  background-color: #776d71;
+}
+.navbar-default .navbar-nav > .open > a,
+.navbar-default .navbar-nav > .open > a:hover,
+.navbar-default .navbar-nav > .open > a:focus {
+  color: #ffffff;
+  background-color: #776d71;
+}
+.navbar-default .navbar-toggle {
+  border-color: #776d71;
+}
+.navbar-default .navbar-toggle:hover,
+.navbar-default .navbar-toggle:focus {
+  background-color: #776d71;
+}
+.navbar-default .navbar-toggle .icon-bar {
+  background-color: #ffffff;
+}
+.navbar-default .navbar-collapse,
+.navbar-default .navbar-form {
+  border-color: #ffffff;
+}
+.navbar-default .navbar-link {
+  color: #ffffff;
+}
+.navbar-default .navbar-link:hover {
+  color: #ffffff;
+}
+
+@media (max-width: 767px) {
+  .navbar-default .navbar-nav .open .dropdown-menu > li > a {
+    color: #ffffff;
+  }
+  .navbar-default .navbar-nav .open .dropdown-menu > li > a:hover,
+  .navbar-default .navbar-nav .open .dropdown-menu > li > a:focus {
+    color: #ffffff;
+  }
+  .navbar-default .navbar-nav .open .dropdown-menu > .active > a,
+  .navbar-default .navbar-nav .open .dropdown-menu > .active > a:hover,
+  .navbar-default .navbar-nav .open .dropdown-menu > .active > a:focus {
+    color: #ffffff;
+    background-color: #776d71;
+  }
+}
+
+/*左方灰色navbar*/
+.navbar-default2 {
+  background-color: #f7f7f7;
+  border-color: #ededed;
+}
+.navbar-default2 .navbar-brand {
+  color: #2e2d4d;
+}
+.navbar-default2 .navbar-brand:hover,
+.navbar-default2 .navbar-brand:focus {
+  color: #2e2d4d;
+}
+.navbar-default2 .navbar-text {
+  color: #2e2d4d;
+}
+.navbar-default2 .navbar-nav > li > a {
+  color: #2e2d4d;
+}
+.navbar-default2 .navbar-nav > li > a:hover,
+.navbar-default2 .navbar-nav > li > a:focus {
+  color: #2e2d4d;
+}
+.navbar-default2 .navbar-nav > li > .dropdown-menu {
+  background-color: #f7f7f7;
+}
+.navbar-default2 .navbar-nav > li > .dropdown-menu > li > a {
+  color: #2e2d4d;
+}
+.navbar-default2 .navbar-nav > li > .dropdown-menu > li > a:hover,
+.navbar-default2 .navbar-nav > li > .dropdown-menu > li > a:focus {
+  color: #2e2d4d;
+  background-color: #ededed;
+}
+.navbar-default2 .navbar-nav > li > .dropdown-menu > li > .divider {
+  background-color: #ededed;
+}
+.navbar-default2 .navbar-nav .open .dropdown-menu > .active > a,
+.navbar-default2 .navbar-nav .open .dropdown-menu > .active > a:hover,
+.navbar-default2 .navbar-nav .open .dropdown-menu > .active > a:focus {
+  color: #2e2d4d;
+  background-color: #ededed;
+}
+.navbar-default2 .navbar-nav > .active > a,
+.navbar-default2 .navbar-nav > .active > a:hover,
+.navbar-default2 .navbar-nav > .active > a:focus {
+  color: #2e2d4d;
+  background-color: #ededed;
+}
+.navbar-default2 .navbar-nav > .open > a,
+.navbar-default2 .navbar-nav > .open > a:hover,
+.navbar-default2 .navbar-nav > .open > a:focus {
+  color: #2e2d4d;
+  background-color: #ededed;
+}
+.navbar-default2 .navbar-toggle {
+  border-color: #ededed;
+}
+.navbar-default2 .navbar-toggle:hover,
+.navbar-default2 .navbar-toggle:focus {
+  background-color: #ededed;
+}
+.navbar-default2 .navbar-toggle .icon-bar {
+  background-color: #2e2d4d;
+}
+.navbar-default2 .navbar-collapse,
+.navbar-default2 .navbar-form {
+  border-color: #2e2d4d;
+}
+.navbar-default2 .navbar-link {
+  color: #2e2d4d;
+}
+.navbar-default2 .navbar-link:hover {
+  color: #2e2d4d;
+}
+
+@media (max-width: 767px) {
+  .navbar-default2 .navbar-nav .open .dropdown-menu > li > a {
+    color: #2e2d4d;
+  }
+  .navbar-default2 .navbar-nav .open .dropdown-menu > li > a:hover,
+  .navbar-default2 .navbar-nav .open .dropdown-menu > li > a:focus {
+    color: #2e2d4d;
+  }
+  .navbar-default2 .navbar-nav .open .dropdown-menu > .active > a,
+  .navbar-default2 .navbar-nav .open .dropdown-menu > .active > a:hover,
+  .navbar-default2 .navbar-nav .open .dropdown-menu > .active > a:focus {
+    color: #2e2d4d;
+    background-color: #ededed;
+  }
+}
+
+/*通知欄*/
+@media (min-width: 1250px) {
+	.notification-list {
+		width: 20vw;
+		height: 25vw;
+		overflow: auto;
+	}
+}
+
+@media (min-width: 1001px) and (max-width: 1250px) {
+	.notification-list {
+		width: 25vw;
+		height: 30vw;
+		overflow: auto;
+	}
+}
+
+@media (min-width: 861px) and (max-width: 1000px) {
+	.notification-list {
+		width: 30vw;
+		height: 35vw;
+		overflow: auto;
+	}
+}
+
+@media (min-width: 801px) and (max-width: 860px) {
+	.notification-list {
+		width: 35vw;
+		height: 40vw;
+		overflow: auto;
+	}
+}
+
+@media (min-width: 768px) and (max-width: 800px) {
+	.notification-list {
+		width: 40vw;
+		height: 45vw;
+		overflow: auto;
+	}
+}
+
+@media (min-width: 601px) and (max-width: 768px) {
+	.notification-list {
+		width: 45vw;
+		height: 50vw;
+		overflow: auto;
+	}
+}
+
+@media (min-width: 551px) and (max-width: 600px) {
+	.notification-list {
+		width: 50vw;
+		height: 55vw;
+		overflow: auto;
+	}
+}
+
+@media (min-width: 501px) and (max-width: 551px) {
+	.notification-list {
+		width: 55vw;
+		height: 60vw;
+		overflow: auto;
+	}
+}
+
+@media (min-width: 426px) and (max-width: 500px) {
+	.notification-list {
+		width: 60vw;
+		height: 65vw;
+		overflow: auto;
+	}
+}
+
+@media (max-width: 426px) {
+	.notification-list {
+		width: 80vw;
+		height: 85vw;
+		overflow: auto;
+	}
+}
+
+/*左邊灰框*/
+.left-list {
+	border-radius: 0 !important;
+	border: 4px solid #f0f0f0;
+}
+.left-list > .panel-heading, .left-list > .panel-footer {
+	background-color: white;
+}
+
+/*右邊灰框*/
+.right-content {
+	border-radius: 0 !important;
+	border: 4px solid #f0f0f0;
+}
+.right-content > .panel-heading, .right-content > .panel-footer {
+	background-color: white;
+}
+
+/*灰底按鈕*/
+.btn-default {
+	background-color:#f0f0f0;
+}
+
+/*深藍色按鈕*/
+.btn-darkBlue { 
+  color: #FFFFFF; 
+  background-color: #2E2D4D; 
+  border-color: #2E2D4D; 
+} 
+ 
+.btn-darkBlue:hover, 
+.btn-darkBlue:focus, 
+.btn-darkBlue:active, 
+.btn-darkBlue.active, 
+.open .dropdown-toggle.btn-darkBlue { 
+  color: #FFFFFF; 
+  background-color: #42425E; 
+  border-color: #2E2D4D; 
+} 
+ 
+.btn-darkBlue:active, 
+.btn-darkBlue.active, 
+.open .dropdown-toggle.btn-darkBlue { 
+  background-image: none; 
+} 
+ 
+.btn-darkBlue.disabled, 
+.btn-darkBlue[disabled], 
+fieldset[disabled] .btn-darkBlue, 
+.btn-darkBlue.disabled:hover, 
+.btn-darkBlue[disabled]:hover, 
+fieldset[disabled] .btn-darkBlue:hover, 
+.btn-darkBlue.disabled:focus, 
+.btn-darkBlue[disabled]:focus, 
+fieldset[disabled] .btn-darkBlue:focus, 
+.btn-darkBlue.disabled:active, 
+.btn-darkBlue[disabled]:active, 
+fieldset[disabled] .btn-darkBlue:active, 
+.btn-darkBlue.disabled.active, 
+.btn-darkBlue[disabled].active, 
+fieldset[disabled] .btn-darkBlue.active { 
+  background-color: #2E2D4D; 
+  border-color: #2E2D4D; 
+} 
+ 
+.btn-darkBlue .badge { 
+  color: #2E2D4D; 
+  background-color: #FFFFFF; 
+}
+
+/*左邊列表裡的項目*/
+.left-list-item {
+	border-width: 2px;
+	border-style: solid;
+	border-color: white;
+}
+.left-list-item.healthTracking {
+	background-color: #F7E56E;
+}
+.left-list-item.healthTracking:hover {
+	background-color: #f9ec99;
+}
+.left-list-item.patientInstruction, .left-list-item.patientFolder {
+	background-color: #A2E8DD;
+}
+.left-list-item.patientInstruction:hover, .left-list-item.patientFolder:hover {
+	background-color: #bdeee7;
+}
+.left-list-item.notice {
+	background-color: #80E7F5;
+}
+.left-list-item.notice:hover {
+	background-color: #a6eef8;
+}
+.left-list-item.questionnaireGreen {
+	background-color: #D2F898;
+}
+.left-list-item.questionnaireGreen:hover {
+	background-color: #e0fab7;
+}
+.left-list-item.questionnairePink {
+	background-color: #F8B1B0;
+}
+.left-list-item.questionnairePink:hover {
+	background-color: #f1b7b7;
+}
+.left-list-item.questionnairePink2 {
+	background-color: #fbd8d7;
+}
+.left-list-item.questionnairePink2:hover {
+	background-color: #fce7e7;
+}
+.left-list-item.medicalRecord {
+	background-color: #A3E7FC;
+}
+.left-list-item.medicalRecord:hover {
+	background-color: #beeefc;
+}
+
+/*隱藏scrollbar但可以滑動*/
+::-webkit-scrollbar {
+	display: none;
+}
+
+/*病患資訊tab*/
+/* tab color */
+.nav-tabs > li > a {
+	background-color: white; 
+	border-color: #2e2d4d;
+	color:#2e2d4d;
+	padding-top: 0.5vh; 
+	padding-bottom: 0.5vh;
+	margin-top: 0.5vh;
+}
+/* active tab color */
+.nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus {
+	color: #fff;
+	background-color: #2e2d4d;
+	border: 1px solid #2e2d4d8;
+}
+/* hover tab color */
+.nav-tabs > li > a:hover {
+	border-color: #2e2d4d;
+	background-color: #eaeaed;
+	color: #2e2d4d;
+}
+ul.nav-tabs {
+	padding-top: 10px;
+}
+.nav-tabs > #patientNameOnTab {
+	margin-top: 1vh;
+	margin-left: 1vw;
+	margin-right: 1vw;
+}
+
+/*病患資訊-健康狀況追蹤上方黃色方塊*/
+.healthTrackingTemplate {
+	display: inline-block;
+	width: 300px;
+	margin-bottom: 0;
+	margin-right: 2vh;
+}
+.healthTrackingTemplate > .panel-body {
+	background-color: #F7E56E;
+	min-height: 17vh;
+	max-height: 17vh;
+}
+.healthTrackingTemplate > a > .panel-footer {
+	background-color: white;
+	border-style: solid;
+	border-color: #F7E56E;
+}
+.healthTrackingTemplate > a > .panel-footer > span {
+	color: black;
+}
+
+/*衛教資訊文章標題*/
+.list-group-horizontal .list-group-item.patientInstructionTitle {
+    display: inline-block;
+	padding-top: 0.8vh;
+	padding-bottom: 0.8vh;
+}
+.list-group-horizontal .list-group-item.patientInstructionTitle {
+	margin-bottom: 0;
+	margin-left: -4px;
+	margin-right: 0;
+	border: 1px solid #A2E8DD;
+}
+.list-group-horizontal .list-group-item:first-child.patientInstructionTitle {
+	border-top-right-radius: 0;
+	border-bottom-left-radius: 4px;
+	background-color: #A2E8DD;
+}
+.list-group-horizontal .list-group-item:last-child.patientInstructionTitle {
+	border-top-right-radius: 4px;
+	border-bottom-left-radius: 0;
+	background-color: white;
+}
+.list-group-horizontal {
+	margin-bottom: 0;
+	margin-left: 0.5vw;
+}
+
+/*自評問卷標題*/
+.list-group-horizontal .list-group-item.pinkTitle {
+    display: inline-block;
+	padding-top: 0.8vh;
+	padding-bottom: 0.8vh;
+}
+.list-group-horizontal .list-group-item.pinkTitle {
+	margin-bottom: 0;
+	margin-left: -4px;
+	margin-right: 0;
+	border: 1px solid #F8B1B0;
+	background-color: white;
+}
+.list-group-horizontal .list-group-item:first-child.pinkTitle {
+	border-top-right-radius: 0;
+	border-bottom-left-radius: 4px;
+	background-color: #F8B1B0;
+}
+.list-group-horizontal .list-group-item:last-child.pinkTitle {
+	border-top-right-radius: 4px;
+	border-bottom-left-radius: 0;
+	background-color: #F8B1B0;
+}
+.list-group-horizontal {
+	margin-bottom: 0;
+	margin-left: 0.5vw;
+}
+
+/*後評問卷標題*/
+.list-group-horizontal .list-group-item.greenTitle {
+    display: inline-block;
+	padding-top: 0.8vh;
+	padding-bottom: 0.8vh;
+}
+.list-group-horizontal .list-group-item.greenTitle {
+	margin-bottom: 0;
+	margin-left: -4px;
+	margin-right: 0;
+	border: 1px solid #D2F898;
+	background-color: white;
+}
+.list-group-horizontal .list-group-item:first-child.greenTitle {
+	border-top-right-radius: 0;
+	border-bottom-left-radius: 4px;
+	background-color: #D2F898;
+}
+.list-group-horizontal .list-group-item:last-child.greenTitle {
+	border-top-right-radius: 4px;
+	border-bottom-left-radius: 0;
+	background-color: #D2F898;
+}
+.list-group-horizontal {
+	margin-bottom: 0;
+	margin-left: 0.5vw;
+}
+
+/*後評問卷病患答案*/
+.list-group-horizontal .list-group-item.pinkAnswer {
+    display: inline-block;
+	padding-top: 0.8vh;
+	padding-bottom: 0.8vh;
+}
+.list-group-horizontal .list-group-item.pinkAnswer {
+	margin-bottom: 0;
+	margin-left: -4px;
+	margin-right: 0;
+	border: 1px solid #F8B1B0;
+}
+.list-group-horizontal .list-group-item:first-child.pinkAnswer {
+	border-top-right-radius: 0;
+	border-bottom-left-radius: 4px;
+	background-color: #F8B1B0;
+}
+.list-group-horizontal .list-group-item:last-child.pinkAnswer {
+	border-top-right-radius: 4px;
+	border-bottom-left-radius: 0;
+	background-color: #white;
+}
+.list-group-horizontal {
+	margin-bottom: 0;
+	margin-left: 0.5vw;
+}
+
+/*後評問卷後評答案*/
+.list-group-horizontal .list-group-item.greenAnswer {
+    display: inline-block;
+	padding-top: 0.8vh;
+	padding-bottom: 0.8vh;
+}
+.list-group-horizontal .list-group-item.greenAnswer {
+	margin-bottom: 0;
+	margin-left: -4px;
+	margin-right: 0;
+	border: 1px solid #D2F898;
+}
+.list-group-horizontal .list-group-item:first-child.greenAnswer {
+	border-top-right-radius: 0;
+	border-bottom-left-radius: 4px;
+	background-color: #D2F898;
+}
+.list-group-horizontal .list-group-item:last-child.greenAnswer {
+	border-top-right-radius: 4px;
+	border-bottom-left-radius: 0;
+	background-color: #white;
+}
+.list-group-horizontal {
+	margin-bottom: 0;
+	margin-left: 0.5vw;
+}
+
+/*自評問卷題目*/
+.pinkQuestion {
+	border-color: #F8B1B0;
+}
+.pinkQuestion > .panel-heading {
+	background-color: #F8B1B0;
+}
+
+/*後評問卷題目*/
+.greenQuestion {
+	border-color: #D2F898;
+}
+.greenQuestion > .panel-heading {
+	background-color: #D2F898;
+}
+
+/*衛教文章回覆留言或刪除留言按鈕*/
+.commentButton:hover {
+	text-decoration: underline;
+}
+

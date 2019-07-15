@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8"> 
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>BBDP</title>
+		<link rel="Shortcut Icon" type="image/x-icon" href="img/frame/icon.ico">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+		<link href="frame/metisMenu/metisMenu.css" rel="stylesheet">
+		<script src="frame/metisMenu/metisMenu.js"></script>
+		<link href="frame/sb-admin-2/sb-admin-2.css" rel="stylesheet">
+		<script src="frame/sb-admin-2/sb-admin-2.js"></script>
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+		<!-- 醫生端框架 css -->
+		<link href="css/doctorFrame.css" rel="stylesheet">
+	</head>
+	<body>
+		<div id="wrapper">
+			<!-- prepend navbar in doctorFrame.js -->
+			<div id="page-wrapper">
+				<div class="row">
+					<!-- prepend nav-tabs in patientInformationFrame.js -->
+					<!-- 內容 -->
+					<div class="col-md-12 col-sm-12 col-xs-12">
+						<!-- 上面灰框 -->
+						<div class="row" style="margin-top: 3vh; padding-left: 3vh; padding-right: 3vh;">
+							<div class="panel panel-default left-list">
+								<div class="panel-body" id="displayItem" style="min-height: 28vh; max-height: 28vh; overflow-x: scroll; white-space: nowrap;">
+									<!-- 上面灰框的項目(動態產生) -->
+									<!--<div class="panel panel-default healthTrackingTemplate">
+										<div class="panel-body">
+											身高體重<br>
+											身高：175公分(cm)<br>
+											體重：70公斤(kg)<br>
+											最後一次紀錄：2017/01/25 11:00<br>
+											<br>
+										</div>
+										<a href="EditPatientHealthTracking.html">
+											<div class="panel-footer">
+												<span class="pull-left">詳細資料</span>
+												<span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+												<div class="clearfix"></div>
+											</div>
+										</a>
+									</div>
+									<div class="panel panel-default healthTrackingTemplate">
+										<div class="panel-body">
+											2017年01月 血壓紀錄：4筆<br>
+											最後一次血壓紀錄：2017/01/25 11:00<br>
+											舒張壓：70mmHg<br>
+											收縮壓：120mmHg<br>
+											心跳：70次/分<br>
+										</div>
+										<a href="EditPatientHealthTracking.html">
+											<div class="panel-footer">
+												<span class="pull-left">詳細資料</span>
+												<span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+												<div class="clearfix"></div>
+											</div>
+										</a>
+									</div>
+									<div class="panel panel-default healthTrackingTemplate">
+										<div class="panel-body">
+											2017年01月 跌倒紀錄：4筆<br>
+											最後一次跌倒紀錄：2017/01/25 11:00<br>
+											跌倒次數：1次<br>
+											<br>
+											<br>
+										</div>
+										<a href="EditPatientHealthTracking.html">
+											<div class="panel-footer">
+												<span class="pull-left">詳細資料</span>
+												<span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+												<div class="clearfix"></div>
+											</div>
+										</a>
+									</div>-->
+								</div>
+							</div>
+						</div>
+						<!-- 上下兩個灰框之間 -->
+						<div class="row" style="padding-left: 3vh; padding-right: 1vh;">
+							<div class="col-md-9 col-sm-9 col-xs-9">
+								<!-- 該健康狀況追蹤模板名稱 -->
+								<span class="lead" id="itemName"><!--<b>血壓</b>--></span>
+							</div>
+							<div class="col-md-3 col-sm-3 col-xs-3">
+								<!-- 上下兩個灰框之間的按鈕 -->
+								<div class="btn-group pull-right">
+									<button type="button" class="btn btn-default" onclick="goToChart()">查看統計圖</button>
+									<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+										<span class="caret"></span>
+									</button>
+									<ul class="dropdown-menu" role="menu">
+										<li><a style="cursor: pointer;" onclick="deleteHealthTracking()">刪除</a></li>
+									</ul>
+								</div>
+							</div>
+						</div>
+						<!-- 下面灰框 -->
+						<div class="row" style="margin-top: 3vh; padding-left: 3vh; padding-right: 3vh;">
+							<div class="panel panel-default left-list">
+								<div class="panel-body" style="overflow: auto;">
+									<div class="row">
+										<div class="col-md-4 col-sm-12">
+											<!-- 下面灰框左邊的設定 -->
+											<div class="row" style="margin-left: 0.5vw;">
+												<h5><b>開始日期</b></h5>
+											</div>
+											<div class="row">
+												<div class="col-md-8 col-sm-8">
+													<input type="date" class="form-control" id="dateStart" placeholder="開始日期" onchange="selectDate()"/>
+												</div>
+											</div>
+											<div class="row" style="margin-left: 0.5vw;">
+												<h5><b>結束日期</b></h5>
+											</div>
+											<div class="row">
+												<div class="col-md-8 col-sm-8">
+													<input type="date" class="form-control" id="dateEnd" placeholder="結束日期" onchange="selectDate()"/>
+												</div>
+											</div>
+										</div>
+										<div class="col-md-8 col-sm-12" id="data">
+											<!--<table class="table table-bordered table-hover" >
+												<thead>
+													<tr>
+														<th style="background-color: #F7E56E;">日期</th>
+														<th style="background-color: #F7E56E;">身高(公分)</th>
+														<th style="background-color: #F7E56E;">體重(公斤)</th>
+													</tr>
+												</thead>
+												<tbody>  -->
+													<!-- 下面灰框右邊的單筆資料 -->
+													<!--<tr>
+														<td>2017-01-02</td>
+														<td>170</td>
+														<td>65</td>
+													</tr>
+													<tr>
+														<td>2017-02-02</td>
+														<td>171</td>
+														<td>61</td>
+													</tr>
+													<tr>
+														<td>2017-03-02</td>
+														<td>171</td>
+														<td>67</td>
+													</tr>
+												</tbody>  -->
+											</table>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<!-- modalGenerator js -->
+		<script src="js/modalGenerator.js"></script>
+		
+		<!-- 醫生端框架 js -->
+		<script src="js/doctorFrame.js"></script>
+		<!-- 病患資訊框架 js -->
+		<script src="js/patientInformationFrame.js"></script>
+		<!-- 計算高度 -->
+		<script>
+			//下面灰框高度
+			$("#page-wrapper > .row > div > div.row:last > .panel > .panel-body").css("height", $(window).height() - $("#page-wrapper > .row > div > div.row:first").outerHeight() - $("#page-wrapper > .row > div > div.row:eq(1)").outerHeight() - 200);
+		</script>
+		<!-- 把滑鼠滾輪改成滑動橫向捲軸 -->
+		<script type="text/javascript" src="js/jquery.mousewheel.js"></script>
+		<!--<script>
+			$(function() {
+				$(".healthTrackingTemplate").parent().mousewheel(function(event, delta) {
+					this.scrollLeft -= (delta * 30);
+					event.preventDefault();
+				});
+			});
+		</script>-->
+		
+		<!-- patientHealthTracking.js(上半邊 項目)-->
+		<script src="js/patientHealthTracking.js"></script>
+		<!-- editPatientHealthTrackingData.js-->
+		<script src="js/editPatientHealthTrackingData.js"></script>
+		
+	</body>
+</html>

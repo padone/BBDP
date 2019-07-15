@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8"> 
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>BBDP</title>
+		<link rel="Shortcut Icon" type="image/x-icon" href="img/frame/icon.ico">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+		<link href="frame/metisMenu/metisMenu.css" rel="stylesheet">
+		<script src="frame/metisMenu/metisMenu.js"></script>
+		<link href="frame/sb-admin-2/sb-admin-2.css" rel="stylesheet">
+		<script src="frame/sb-admin-2/sb-admin-2.js"></script>
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+		<!-- 醫生端框架 css -->
+		<link href="css/doctorFrame.css" rel="stylesheet">
+	</head>
+	<body>
+		<div id="wrapper">
+			<!-- prepend navbar in doctorFrame.js -->
+			<div id="page-wrapper">
+				<div class="row">
+					<!-- 內容 -->
+					<div class="col-md-12">
+						<div class="row">
+							<!-- 左邊灰框 -->
+							<div class="col-md-4" style="margin-top: 3vh; margin-bottom: 3vh;">
+								<div class="row">
+									<div class="col-md-12">
+										<button type="button" class="btn btn-default" onclick="location.href='NewPatientInstruction.html'">新增衛教資訊</button>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-12">
+										<br />
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-12">
+										<div class="panel panel-default left-list" style="min-height: 73vh; max-height: 73vh;">
+											<div class="panel-heading">
+												<form>
+													<!-- 左邊灰框上面的選單 -->
+													<select class="form-control" id="type1" onChange="changeType1(this.selectedIndex);">
+														<option value="all">衛教資訊分類</option>
+													</select>	
+												</form>
+											</div>
+											<div class="panel-body" style="min-height: 65vh; max-height: 65vh; overflow-y: auto;">
+												<div class="list-group" id="blueDiv">
+													<!-- 左邊灰框下面的項目(動態產生) 
+													<a href="EditPatientInstruction.html" class="list-group-item left-list-item patientInstruction">
+														<h4 class="list-group-item-heading">巴金森氏病介紹</h4>
+														<p class="list-group-item-text text-right">2017-01-05 20:30</p>
+													</a>
+													<a href="EditPatientInstruction.html" class="list-group-item left-list-item patientInstruction">
+														<h4 class="list-group-item-heading">如何照顧失智家人</h4>
+														<p class="list-group-item-text text-right">2017-01-03 17:45</p>
+													</a>
+													<a href="EditPatientInstruction.html" class="list-group-item left-list-item patientInstruction">
+														<h4 class="list-group-item-heading">腦髓漸空（老年失智症）預防保健</h4>
+														<p class="list-group-item-text text-right">2017-01-02 13:22</p>
+													</a>-->
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-8" style="margin-top: 3vh; margin-bottom: 3vh;">
+								<div class="row">
+									<div class="col-md-9 col-sm-9 col-xs-9">
+										<!-- 右邊灰框上面的湖水綠色的標題 -->
+										<div class="list-group list-group-horizontal">
+											<li class="list-group-item patientInstructionTitle" id="title"><!-- 巴金森氏病介紹 --></li>
+											<li class="list-group-item patientInstructionTitle" id="date"><!-- 2017-01-05 20:30 --></li>
+										</div>
+									</div>
+									<div class="col-md-3 col-sm-3 col-xs-3">
+										<!-- 右上角的按鈕 -->
+										<div class="btn-group pull-right">
+											<button type="button" class="btn btn-default" onclick="goToArticle()">檢視文章</button>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-12">
+										<br />
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-12">
+										<!-- 右邊灰框 -->
+										<div class="panel panel-default right-content" style="min-height: 73vh; max-height: 73vh; overflow-y: auto;">
+											<div class="panel-body" style="overflow-y: auto;">
+												<div class="row" style="margin-left: 0.5vw;">
+													<h5 style="font-weight: bold;">留言</h5>
+												</div>
+												<ul class="list-group comment-list-group" id="comment" style="margin: 1vw;">
+													<!-- 右邊灰框的留言項目(動態產生) 
+													<li class="list-group-item">
+														<div class="media">
+															<div class="media-left media-middle">
+																 留言大頭貼(暫時寫死)
+																<img src="img/frame/user.png" class="media-object" style="width: 60px; object-fit: cover; margin-right: 1vw;" />
+															</div>
+															<div class="media-body">
+																<span class="list-group-item-heading" style="font-weight: bold;">王小明</span>
+																<span class="pull-right">2017-01-10 15:00</span><br>
+																<p class="pull-left" style="margin-top: 1vh;">王小明到此一遊</p><br>
+																<p class="pull-right">
+																	<span id="replyComment0" class="commentButton" style="cursor: pointer; margin-right: 1vw;" onclick="replyComment()">回覆</span>
+																															<!--  replyComment() 暫時在最下面 
+																	<span class="commentButton" style="cursor: pointer;" onclick="">刪除</span>
+																</p>
+																<br>
+															</div>
+														</div>
+													</li>-->
+												</ul>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>			
+				</div>
+			</div>
+		</div>
+				
+		<script src="js/modalGenerator.js"></script>		<!-- modalGenerator.js-->
+				
+		<!-- 醫生端框架 js -->
+		<script src="js/doctorFrame.js"></script>
+		<!-- 回覆留言 
+		<script>
+			//點回覆會跳出回覆modal
+			function replyComment() {
+				$("body").append(
+"		<div class='modal fade' id='replyCommentModal' role='dialog'>" + 
+"			<div class='modal-dialog'>" + 
+"				<div class='modal-content'>" + 
+"					<div class='modal-header'>" + 
+"						<button type='button' class='close' data-dismiss='modal'>&times;</button>" + 
+"						<h4 class='modal-title'>回覆留言</h4>" + 
+"					</div>" + 
+"					<div class='modal-body'>" + 
+"						<li class='list-group-item'>" + 
+"							<div class='media'>" + 
+"								<div class='media-left media-middle'>" + 
+"									<img src='img/frame/user.png' class='media-object' style='width: 60px; object-fit: cover; margin-right: 1vw;' />" + 	//病患大頭貼
+"								</div>" + 
+"								<div class='media-body'>" + 
+"									<span class='list-group-item-heading' style='font-weight: bold;'>王小明</span>" + 	//病患姓名
+"									<span class='pull-right'>2017-01-10 15:00</span><br>" + 	//病患留言時間
+"									<p class='pull-left' style='margin-top: 1vh;'>王小明到此一遊</p><br>" + 	//病患留言內容
+"								</div>" + 
+"							</div>" + 
+"						</li>" + 
+"						<input type='text' class='form-control' style='margin-top: 2vh;' placeholder='回覆留言...' />" + 	//回覆輸入框
+"					</div>" + 
+"					<div class='modal-footer'>" + 
+"						<button type='button' class='btn btn-default' onclick='clickReply()' data-dismiss='modal'>送出</button>" + 
+"						<button type='button' class='btn btn-default' data-dismiss='modal'>取消</button>" + 
+"					</div>" + 
+"				</div>" + 
+"			</div>" + 
+"		</div>");
+				$('#replyCommentModal').modal('show');
+			}
+			//在回覆modal按下送出執行(暫時先只顯示回覆留言)
+			function clickReply() {
+				$("#replyComment0").parent("p.pull-right").parent("div.media-body").append(
+"																<hr><span class='list-group-item-heading' style='font-weight: bold;'>我的回覆</span>" + 
+"																<span class='pull-right'>2017-01-15 15:00</span><br>" + 	//回覆時間
+"																<p class='pull-left' style='margin-top: 1vh;'>請不要亂留言!!</p><br>" +		//回覆內容
+"																<p class='pull-right'>" + 
+"																<span class='commentButton' style='cursor: pointer;' onclick=''>刪除</span>");
+				
+				//清除原本回覆UI
+				$("#replyComment0").remove();
+				//隱藏和清除回覆modal
+				$("#replyCommentModal").hide();
+				setTimeout(function(){ $("#replyCommentModal").remove(); }, 2000);
+			}
+		</script>-->
+		<!-- 計算高度 -->
+		<script>
+			//左邊灰框的panel-body高度
+			$(".left-list > .panel-body").css("min-height", "60vh");
+			$(".left-list > .panel-body").css("max-height", "60vh");
+		</script>
+		
+		<script src="js/editPatientInstructionComment.js"></script>		<!-- editPatientInstructionComment.js-->
+		<script src="js/patientInstruction.js"></script>		<!-- patientInstruction.js-->
+		
+	</body>
+</html>

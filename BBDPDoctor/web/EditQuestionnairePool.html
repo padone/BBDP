@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8"> 
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>BBDP</title>
+		<link rel="Shortcut Icon" type="image/x-icon" href="img/frame/icon.ico">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+		<link href="frame/metisMenu/metisMenu.css" rel="stylesheet">
+		<script src="frame/metisMenu/metisMenu.js"></script>
+		<link href="frame/sb-admin-2/sb-admin-2.css" rel="stylesheet">
+		<script src="frame/sb-admin-2/sb-admin-2.js"></script>
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+		<!-- 醫生端框架 css -->
+		<link href="css/doctorFrame.css" rel="stylesheet">
+		<!-- HTML編輯器 -->
+		<!-- Include external CSS. -->
+		<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.25.0/codemirror.min.css">
+		<!-- Include Editor style. -->
+		<link href="https://cdnjs.cloudflare.com/ajax/libs/froala-editor/2.5.1/css/froala_editor.pkgd.min.css" rel="stylesheet" type="text/css" />
+		<link href="https://cdnjs.cloudflare.com/ajax/libs/froala-editor/2.5.1/css/froala_style.min.css" rel="stylesheet" type="text/css" />
+		<!-- Include external JS libs. -->
+		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.25.0/codemirror.min.js"></script>
+		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.25.0/mode/xml/xml.min.js"></script>
+		<!-- Include Editor JS files. -->
+		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/froala-editor/2.5.1//js/froala_editor.pkgd.min.js"></script>
+		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/froala-editor/2.5.1/js/languages/zh_tw.js"></script>
+		<!-- 排序 -->
+		<script src="http://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>			
+		<script src="js/question.js"></script>
+		<style type="text/css">
+			#phoneView img { 
+				max-width:100%;
+			}
+			#phoneView iframe {
+				max-width:100%;
+			}
+			ul{ list-style-type:none;}
+			li{
+				padding: 0;
+				list-style-type:none;
+			}
+			.myMOUSE{ cursor: move; }			
+		</style>
+	</head>
+	<body>
+		<div id="wrapper">
+			<!-- prepend navbar in doctorFrame.js -->
+			<div id="page-wrapper">
+				<div class="row">
+					<!-- 內容 -->
+					<div class="col-md-12">
+						<div class="row">
+							<!-- 左邊灰框 -->
+							<div class="col-md-4" style="margin-top: 3vh; margin-bottom: 3vh;">
+								<div class="row">
+									<div class="col-md-12 col-sm-12 col-xs-12">
+										<button type="button" class="btn btn-default" onclick="location.href='NewQuestionnairePool.html'">新增問卷題目</button>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-12">
+										<br />
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-12">
+										<div class="panel panel-default left-list" style="min-height: 73vh; max-height: 73vh;">
+											<div class="panel-heading" id = "changeCheckButton">
+												<button type="button" class="btn btn-default" onclick="checkTheBox()">勾選題目</button>
+											</div>
+											<div class="panel-heading">
+												<form>
+													<!-- 左邊灰框上面的選單 -->
+													<select class="form-control" id="questionnairePoolType" onchange="changeQuestionnairePoolType()">
+														<option value="all">問卷題目分類</option>
+													</select>
+												</form>
+											</div>
+											<div class="panel-body" style="overflow-y: auto;">
+												<div class="list-group" id = "questionList">
+													<!-- 左邊灰框下面的項目(動態產生) -->
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-8" style="margin-top: 3vh; margin-bottom: 3vh;">
+								<div class="row">
+									<div class="col-md-9 col-sm-9 col-xs-9"></div>
+									<div class="col-md-3 col-sm-3 col-xs-3">
+										<!-- 右上角的更多按鈕 -->
+										<div class="btn-group pull-right">
+											<button type="button" class="btn btn-default" onclick="checkUpdate()">儲存</button>
+											<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+												<span class="caret"></span>
+											</button>
+											<ul class="dropdown-menu" role="menu">
+												<li><a style="cursor: pointer;"data-toggle="modal" data-target="#F12Modal" onclick="changeHtmlEditor()">預覽</a></li>
+												<li><a style="cursor: pointer;" onclick="medicalRecord()">病歷摘要格式</a></li>
+												<li class="divider"></li>
+												<li><a style="cursor: pointer;" data-toggle="modal" data-target="#deleteModal">刪除</a></li>
+											</ul>
+										</div>										
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-12">
+										<br />
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-12">
+										<!-- 右邊灰框 -->
+										<div class="panel-group" id="accordion">
+											<div class="panel panel-default right-content" style="min-height: 73vh; max-height: 73vh;">
+												<div class="panel-heading">
+													<div class="row" style="margin-left: 0.5vw;">
+														<h5><b>分類</b></h5>
+													</div>
+													<!-- 右邊灰框上面的分類 -->
+													<div class="row">
+														<div class="col-md-4">
+															<select class="form-control editSelect" id = "selectType" onchange="changeType()">
+																<option value="">問卷題目分類</option>
+															</select>
+														</div>
+														<div class="col-md-1">
+															<h5>或</h5>
+														</div>
+														<div class="col-md-4">
+															<input type="text" id = "inputType" class="form-control" placeholder="請輸入要新增的分類名稱..." />
+														</div>
+													</div>
+													<div class="row" style="margin-left: 0.5vw;">
+														<h5><b>題型</b></h5>
+													</div>
+													<!-- 右邊灰框上面的題型 -->
+													<div class="row">
+														<div class="col-md-4">
+															<select class="form-control editSelect" onChange="changeAnswer()" id="answerType">
+																<option value="單選題">單選題</option>
+																<option value="簡答題">簡答題</option>
+															</select>
+														</div>
+													</div>
+												</div>
+												<div class="panel-heading" data-toggle="collapse" data-parent="#accordion" href="#CollapseQ" style="cursor: pointer; border-radius: 0 !important; border-top: 1px solid #dddddd;">
+													<span class="pull-left" style="color: black;"><b>編輯題目</b></span>
+													<span class="pull-right" style="color: black;"><i class="fa fa-unsorted"></i></span>
+													<div class="clearfix"></div>
+												</div>
+												<div id="CollapseQ" class="panel-collapse collapse in">
+													<div id="HtmlEditor" class="panel-body" style="overflow-y: auto;">
+														<div id="froala-editor"></div>
+													</div>
+												</div>
+												<div class="panel-heading" data-toggle="collapse" data-parent="#accordion" href="#CollapseA" style="cursor: pointer; border-radius: 0 !important; border-top: 1px solid #dddddd; border-bottom: 1px solid #dddddd;">
+													<span class="pull-left" style="color: black;"><b>編輯答案</b></span>
+													<span class="pull-right" style="color: black;"><i class="fa fa-unsorted"></i></span>
+													<div class="clearfix"></div>
+												</div>
+												<div id="CollapseA" class="panel-collapse collapse">
+													<div class="panel-body" style="overflow-y: auto; border-top: 1px solid #ffffff;">
+														<!--選項-->
+														<div id="optionArea">
+														</div>
+													</div>
+													<div class="panel-footer" style="background-color: white; border-radius: 0 !important; border-top: 1px solid #dddddd;">
+														<div class="row">
+															<div class="col-md-4" id="addOption">
+																<!-- 右邊灰框下面的新增選項按鈕 -->
+																<button type="button" class="btn btn-default" onClick="addAnswer(1)">新增選項</button>&nbsp;
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- 病歷摘要格式 modal -->
+		<div id="medicalRecordModal" class="modal fade" role="dialog">
+			<div class="modal-dialog modal-lg">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+						<h4 class="modal-title">病歷摘要格式</h4>
+					</div>
+					<div class="modal-body">
+						<div id = "medicalRecordQuestion">
+						</div>
+						<div class="clearfix"></div>
+						<div class="panel panel-default" style="border: 1px solid #D2F898;">
+							<div class="panel-body" id='medicalRecordArea'>
+								<ul class='sortQuestionnaire ui-state-default' id='sortable'>
+								</ul>
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer" id = "medicalRecordButton">
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- Modal -->
+		<div class="modal fade" id="F12Modal" role="dialog">
+			<div class="modal-dialog" id="F12Frame" style = "width:36vh">
+				<div class="modal-content">
+					<div class="modal-header">
+						<select class="form-control" style="width:80%;display:inline;" id="modalSize" onChange="changeModalSize()">					
+							<option value="1">Galaxy S5</option>
+							<option value="2">LG Optimus L70</option>
+							<option value="3">iPhone 5</option>
+							<option value="4">iPhone 6</option>
+							<option value="5">iPhone 6 Plus</option>
+							<option value="6">ipad</option>
+						</select>
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+					</div>
+					<div class="modal-body">
+						<div id = "phoneView" style="height:64vh;font-size:calc(36vh * 0.05));overflow:auto;">
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- 刪除訊息 modal -->
+		<div id="deleteModal" class="modal fade" role="dialog">
+			<div class="modal-dialog modal-sm">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+						<h4 class="modal-title">刪除</h4>		<!-- 提示訊息 modal 標題 -->
+					</div>
+					<div class="modal-body">
+						<p>確定刪除此題目嗎？</p>		<!-- 提示訊息 modal 內容 -->
+					</div>
+					<div class="modal-footer">				<!-- 按鈕可以只有確定，onclick的function可自行更改 -->
+						<button type="button" class="btn btn-default" data-dismiss="modal" onclick="deleteQuestion()">確定</button>
+						<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+					</div>
+				</div>
+			</div>
+		</div>		
+		<!-- 病歷更新訊息 modal -->
+		<div id="updateMRModal" class="modal fade" role="dialog">
+			<div class="modal-dialog modal-sm">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+						<h4 class="modal-title">提示</h4>		<!-- 提示訊息 modal 標題 -->
+					</div>
+					<div class="modal-body">
+						<p>是否更新病歷摘要？</p>		<!-- 提示訊息 modal 內容 -->
+					</div>
+					<div class="modal-footer">				<!-- 按鈕可以只有確定，onclick的function可自行更改 -->
+						<button type="button" class="btn btn-default" data-dismiss="modal" data-dismiss="modal">更新</button>
+						<button type="button" class="btn btn-default" data-dismiss="modal" onclick="send()">不更新</button>
+					</div>
+				</div>
+			</div>
+		</div>				
+		<!-- 醫生端框架 js -->
+		<script src="js/doctorFrame.js"></script>
+		<script src="js/modalGenerator.js"></script>
+		<script>
+			var url = window.location.href;
+			var questionID = url.split("?")[1].split("=")[1];	//取得題目ID
+			var IDType = url.split("?")[1].split("=")[0];	//取得ID類
+			var nowType = 1;	//0選擇 1輸入	
+			var score=0;
+			var content=500;
+			var answerNumber = 0;	//option數量
+			var deleteImage = [];
+			var newImage = [];
+			var delNum=0;
+			var newNum=0;
+			var sortCount = 0;
+			var allowEdit=1;
+			var allClickBtn = 0;
+			var catchOptionNumber = [];
+			var previousOption = 1;
+			var nowOption = 1;
+			var realNumber;
+			var medicalRecordArray = [];
+			var changed = false;
+			var medicalRecordOK = 1;
+			$(document).ready(function(){
+				if(IDType == "num"){
+					$.ajax({
+						url : "QuestionnairePoolServlet",
+						data : {
+							state : "checkID",
+							questionID : questionID
+						},
+						success : function(response){
+							if(response)
+								getAll();
+							else{
+								modalGenerator("警告", "網址錯誤，題目不存在");	
+								$("#accordion").empty();
+							}
+						},
+						error : function() {
+							console.log("錯誤訊息");
+						}
+					});	
+				}else{
+					modalGenerator("警告", "網址錯誤，問卷不存在");	
+					$("#allArea").empty();
+				}					
+				if($('.selector').froalaEditor('fullscreen.isActive')) $('div#froala-editor').css("background-color", "rgba(255, 255, 255, .8)");
+				
+				$('.can_darg').css('cursor', 'move'); //滑鼠標
+
+				$("#sortable").sortable({
+					scroll: true,
+					axis: "y", //只能上下垂直拖拉
+					containment: "#medicalRecordArea", //限制範圍，避免拖拉出界外
+					handle: ".can_darg",
+					cursor: "ns-resize", //滑鼠標
+
+					stop: function(event, ui) { //只有要拖拉，並且停止後
+
+					},
+					update: function(event, ui) { //拖拉，並且有更換動作
+
+					}
+				}).disableSelection(); //讓拖拉作用區塊內的文字無法被選取
+				
+				//是否修改檢查
+				$(".editSelect").change(function () {		//偵測頁面上任一個下拉式選單有沒有被修改
+					changed = true;
+					medicalRecordOK = 0;
+				});				
+			});
+			function getAll(){
+				$.ajax({
+					url : "QuestionnairePoolServlet",
+					data : {
+						state : "allowUpdateQuestion",
+						questionID : questionID
+					},
+					success : function(response){
+						if(response == 1){
+							allowEdit = 0;
+							$("#addOption").empty();
+							modalGenerator("提示", "題目使用中，請小心修改");
+						}
+						getOption();
+					},
+					error : function() {
+						console.log("錯誤訊息");
+					}
+				});	
+				$.ajax({
+					url : "QuestionnairePoolServlet",
+					data : {
+						state : "searchType",						
+					},
+					async: false,					
+					dataType : "json",
+			
+					success : function(response) {
+						$("#selectType").empty();
+						var temp = "<option value='other'>問卷題目分類</option>";
+						for(var i=0; i<response.length; i++){
+							temp+="<option value='"+response[i]+"'>"+response[i]+"</option>";
+						}
+						$("#selectType").append(temp);
+						nowType = 0;
+						$("#inputType").prop("value", "");
+						document.getElementById('inputType').disabled=true;						
+						getType();	//取得此題目的分類
+
+					},
+					error : function() {
+						console.log("錯誤訊息");
+					}
+				});
+				$.ajax({
+					url : "QuestionnairePoolServlet",
+					data : {
+						state : "getKind",
+						questionID : questionID
+					},
+					success : function(response) {
+						$("#answerType").empty();
+						$("#answerType").append("<option value='"+response+"'>"+response+"</option>");	
+					},
+					error : function() {
+						console.log("錯誤訊息");
+					}
+				});
+				$.ajax({
+					url : "QuestionnairePoolServlet",
+					data : {
+						state : "getQuestion",
+						questionID : questionID
+					},
+					success : function(response) {
+						$('.fr-view').empty();
+						$('.fr-view').append(response);
+					},
+					error : function() {
+						console.log("錯誤訊息");
+					}
+				});	
+				
+				froalaEdit();			
+			}
+			function froalaEdit(){
+				var height = $(".right-content").outerHeight() - $(".right-content > .panel-heading:first").outerHeight() - $(".right-content > .panel-heading:eq(1)").outerHeight() - $(".right-content > .panel-heading:eq(2)").outerHeight() - 45;
+				$('div#froala-editor').froalaEditor({
+					imageUploadURL: 'QuestionImageServlet',
+					imageUploadParams: {state: "upload",questionNum: questionID},
+					imageMaxSize: 5 * 1024 * 1024,
+					imageAllowedTypes: ['jpeg', 'jpg', 'png'],
+					toolbarInline: true,
+					placeholderText: false,
+					height: height,
+					toolbarVisibleWithoutSelection: true,
+					charCounterCount: false,
+					inlineMode: false,
+					pastePlain: true,
+					pasteAllowLocalImages: true,
+					language: 'zh_tw',
+					//>= 1200px
+					toolbarButtons: ['undo', 'redo', '-', '|', 'bold', 'italic', 'underline', 'specialCharacters', 'insertHR', '-', 'insertImage', 'selectAll', 'fullscreen', 'html'],
+					//>= 992px
+					toolbarButtonsMD: ['undo', 'redo', '-', '|', 'bold', 'italic', 'underline', 'specialCharacters', 'insertHR', '-', 'insertImage', 'selectAll', 'fullscreen','html'],
+					//>= 768px
+					toolbarButtonsSM: ['undo', 'redo', '-', '|', 'bold', 'italic', 'underline', 'specialCharacters', 'insertHR', '-', 'insertImage', 'selectAll', 'fullscreen','html'],
+					//< 768px
+					toolbarButtonsXS: ['undo', 'redo', '-', '|', 'bold', 'italic', 'underline', 'specialCharacters', 'insertHR', '-', 'insertImage', 'selectAll', 'fullscreen','html'],
+					imageEditButtons: ['imageRemove'],
+					videoEditButtons: ['videoRemove'],
+					imageInsertButtons: ['imageBack', '|', 'imageUpload', 'imageByURL'],
+					videoInsertButtons: ['videoBack', '|', 'videoByURL', 'videoEmbed'],
+					imageDefaultAlign: 'left',
+					videoDefaultAlign: 'left',
+				}).on('froalaEditor.image.inserted', function (e, editor, $img, response) {
+					newImage[newNum] = $img.attr('src');
+					newNum += 1;
+				}).on('froalaEditor.image.removed', function (e, editor, $img) {
+					deleteImage[delNum] = $img.attr('src');
+					delNum += 1;
+			    });			
+			
+			}
+			$(function() {
+				$('div#froala-editor').on('froalaEditor.contentChanged', function (e, editor) {
+					changed = true;
+					medicalRecordOK = 0;
+				})
+			});
+			function medicalRecord() {
+				changed = true;
+				medicalRecordOK = 0;
+				$("#medicalRecordQuestion").empty();
+				$("#medicalRecordButton").empty();
+				var temp = "<div class='panel panel-default' style='border: 1px solid #D2F898;'>";
+				var optionTemp = "";
+				var buttonTemp = "";
+				temp += "<div class='panel-heading' style='background-color: #D2F898;'>"+$('div#froala-editor').froalaEditor('html.get', true)+"</div>";
+				temp += "<div class='panel-body'>";
+				if($('#answerType option:selected').val()=="單選題"){
+					realNumber = 1;
+					for(var i=1; i<=score; i++){
+						j = i+500;
+						if($('#'+j).val()){
+							catchOptionNumber[realNumber] = j;
+							temp += "選項 "+realNumber+"："+$('#'+j).val()+"<br>";
+							optionTemp += "<option value='"+realNumber+"'>選項 "+realNumber+"</option>";
+							realNumber += 1;
+						}
+					}
+					temp += "</div></div>";	
+					if(answerNumber){
+						temp += "<div class='checkbox pull-left'><label><input type='checkbox' id='allOption' onchange='selectAll()'/>套用於全部選項</label></div>";
+						temp +=	"<div class='pull-left form-control-inline' style='margin-left: 2vw;'>";
+						temp +=	"<select class='form-control' id = 'selectOption' onChange='changeMR()'>";
+						temp += optionTemp+"</select></div>";
+						buttonTemp += "<button type='button' class='btn btn-default pull-left' onclick='addQuestionSort()'>新增題目欄位</button>";
+						buttonTemp += "<button type='button' class='btn btn-default pull-left' onclick='addOptionSort()'>新增選項欄位</button>";
+						buttonTemp += "<button type='button' class='btn btn-default pull-left' onclick='addTextSort()'>新增文字欄位</button>";
+					}else{
+						allClickBtn =  0;
+					}
+					buttonTemp += "<button type='button' class='btn btn-default' data-dismiss='modal' onclick='completeMR()'>完成</button>";
+				}else{
+					nowOption = 0;
+					temp += "簡答題</div></div>";
+					buttonTemp += "<button type='button' class='btn btn-default pull-left' onclick='addQuestionSort()'>新增題目欄位</button>";
+					buttonTemp += "<button type='button' class='btn btn-default pull-left' onclick='addAnswerSort()'>新增答案欄位</button>";
+					buttonTemp += "<button type='button' class='btn btn-default pull-left' onclick='addTextSort()'>新增文字欄位</button>";
+					buttonTemp += "<button type='button' class='btn btn-default' data-dismiss='modal' onclick='completeMR()'>完成</button>";
+				}
+				$("#medicalRecordButton").append(buttonTemp);				
+				$("#medicalRecordQuestion").append(temp);
+				if(nowOption)
+					$("#selectOption").val(nowOption);
+				else 
+					$("#selectOption").val(previousOption);
+				if(allClickBtn){
+					nowOption = 0;
+					$('#allOption').prop("checked", true);
+					document.getElementById('selectOption').disabled=true;		
+				}
+				addSaveMR();
+				$("#medicalRecordModal").modal("show");				
+			}
+			function completeMR(){
+				medicalRecordOK = 1;
+				changeMR();			
+			}
+			function addSaveMR(){
+				$("#sortable").empty();
+				if($('#answerType option:selected').val()=="簡答題" || realNumber > 1){
+					if(medicalRecordArray[nowOption]){
+						var tempOption = medicalRecordArray[nowOption].split("<,>");
+						for(var i = 0;i<tempOption.length-1;i++){
+							sortCount+=1;
+							if(tempOption[i]=="病患選擇答案")
+								$(".sortQuestionnaire").append("<li class='dyn_div' id = 'sort_"+sortCount+"' style='margin-left:-3em;'><div><i class='fa fa-bars can_darg myMOUSE' style='color:#666666;font-size:3vh;display:inline;vertical-align:middle;'></i>&nbsp;<input type='text' value='病患選擇答案' readonly='readonly' id='text"+sortCount+"' class='form-control' style='width:70%;display:inline;vertical-align:middle;'>&nbsp;<button type='button' class='btn btn-default remove' style='display:inline;vertical-align:middle;'>刪除</button><div><div style='height:1vh'></div></li>");
+							else if(tempOption[i]=="病患輸入答案")
+								$(".sortQuestionnaire").append("<li class='dyn_div' id = 'sort_"+sortCount+"' style='margin-left:-3em;'><div><i class='fa fa-bars can_darg myMOUSE' style='color:#666666;font-size:3vh;display:inline;vertical-align:middle;'></i>&nbsp;<input type='text' value='病患輸入答案' readonly='readonly' id='text"+sortCount+"' class='form-control' style='width:70%;display:inline;vertical-align:middle;'>&nbsp;<button type='button' class='btn btn-default remove' style='display:inline;vertical-align:middle;'>刪除</button><div><div style='height:1vh'></div></li>");
+							else{
+								$(".sortQuestionnaire").append("<li class='dyn_div' id = 'sort_"+sortCount+"' style='margin-left:-3em;'><div><i class='fa fa-bars can_darg myMOUSE' style='color:#666666;font-size:3vh;display:inline;vertical-align:middle;'></i>&nbsp;<input type='text' value='"+htmlEscapeCharacter(tempOption[i])+"' id='text"+sortCount+"' class='form-control' style='width:70%;display:inline;vertical-align:middle;'>&nbsp;<button type='button' class='btn btn-default remove' style='display:inline;vertical-align:middle;'>刪除</button><div><div style='height:1vh'></div></li>");
+							}
+						}
+					}
+				}				
+			}
+			function getOption(){
+				$.ajax({
+					url : "QuestionnairePoolServlet",
+					data : {
+						state : "getOption",
+						questionID : questionID
+					},
+					
+					dataType : "json",
+					success : function(response) {		
+						for(var i =0;i<response.length;i++){
+							addAnswer(allowEdit);
+							$("#"+score).attr('value',response[i].score);
+							$("#"+content).attr('value',returnEscapeCharacter(response[i].content));
+						}
+						getMedicalRecord();
+					},
+					error : function() {
+						getMedicalRecord();
+					}
+				});			
+			
+			
+			}
+			function getMedicalRecord(){
+				$.ajax({
+					url : "QuestionnairePoolServlet",
+					data : {
+						state : "getMedicalRecord",
+						questionID : questionID
+					},
+					success : function(response) {
+						if(response){
+							var temp = new Object();
+							temp = JSON.parse(response);
+							if(temp.all=="true") allClickBtn = 1;
+							for(var i=0;i<=score;i++){
+								if(temp[i])
+									medicalRecordArray[i] = temp[i];
+							}
+						}						
+					},
+					error : function() {
+						console.log("錯誤訊息");
+					}
+				});	
+			}
+			function getType(){
+				$.ajax({
+					url : "QuestionnairePoolServlet",
+					data : {
+						state : "getType",
+						questionID : questionID
+					},
+					success : function(response) {
+						$("#selectType").val(returnEscapeCharacter(response));
+					},
+					error : function() {
+						console.log("錯誤訊息");
+					}
+				});
+			}
+			function deleteQuestion(){
+				if(allowEdit){
+					$.ajax({
+						url : "QuestionnairePoolServlet",
+						data : {
+							state : "deleteQuestion",
+							questionID : questionID
+						},
+						async: false,
+						success : function(response){
+							deleteQuestionImage();	//刪除圖片整個資料夾
+							changed = false;
+							window.location.href = 'QuestionnairePool.html';
+						},
+						error : function() {
+							console.log("錯誤訊息");
+						}
+					});
+				}else{
+					modalGenerator("提示", "題目使用中不可刪除");					
+				}					
+			}				
+			function send(){
+				var questionString ="";
+				var questionType;
+				var question = $('div#froala-editor').froalaEditor('html.get', true);
+				if($('#answerType option:selected').val()=="單選題") questionString = changeJson();
+				if(removeHTML(question)){
+					if($('div#froala-editor').froalaEditor('html.get', true).length < 5000){
+						if((nowType == 1 && $('#inputType').val())||nowType == 0){
+							if((nowType == 1 && $('#inputType').val().length < 50) || nowType == 0){
+								if($('#answerType option:selected').val()=="簡答題" || questionString!=""){	
+									if(questionString.length < 1000){
+										if(nowType==1) questionType=$('#inputType').val();
+										else questionType=$('#selectType option:selected').val();
+										questionType = htmlEscapeCharacter(questionType);
+										var jsonMedicalRecord = transferMRtoString();
+										if(jsonMedicalRecord.length < 1000){	
+											$.ajax({
+												url : "QuestionnairePoolServlet",
+												data : {
+													state : "updateQuestion",
+													QuestionID : questionID,
+													QuestionName : $('div#froala-editor').froalaEditor('html.get', true),
+													QuestionType :questionType,
+													QuestionOptionType : $('#answerType option:selected').val(),
+													QuestionOption : questionString,
+													MedicalRecord : jsonMedicalRecord							
+												},
+												type : "POST",
+												dataType : "json",						
+												success : function(response) {
+													if (response==1) {
+														changed = false;
+														deleteImageArray();
+														window.location.href = 'QuestionnairePool.html';
+													}else if (response==2) {
+														modalGenerator("提示", "題目已存在");							
+													}
+												},
+												error : function() {
+													console.log("錯誤訊息");
+												}
+											});
+										}else modalGenerator("提示", "病歷字數超過限制");
+									}else modalGenerator("提示", "選項字數超過限制");
+								}else modalGenerator("提示", "請加入選項");
+							}else modalGenerator("提示", "分類名稱字數超過限制");
+						}else modalGenerator("提示", "請選擇或新增分類");
+					}else modalGenerator("提示", "題目字數超過限制");
+				}else modalGenerator("提示", "請輸入題目文字");	
+			}
+			function transferMRtoString(){
+				var temp = new Object();
+				if(allClickBtn)
+					temp.all = "true";		
+				else
+					temp.all = "false";	
+					
+				for(var i=0;i<medicalRecordArray.length;i++){
+					if(medicalRecordArray[i]){
+						temp[i] = htmlEscapeCharacter(medicalRecordArray[i]);			
+					}	
+				}
+			
+				return JSON.stringify(temp);		
+			}
+			function checkUpdate(){
+				if(medicalRecordOK == 0)$('#updateMRModal').modal('show');
+				else send();
+			}
+			function addQuestionSort(){
+				sortCount += 1;
+				var questionValue = removeHTML($('div#froala-editor').froalaEditor('html.get', true));
+				$(".sortQuestionnaire").append("<li class='dyn_div' id = 'sort_"+sortCount+"' style='margin-left:-3em;'><div><i class='fa fa-bars can_darg myMOUSE' style='color:#666666;font-size:3vh;display:inline;vertical-align:middle;'></i>&nbsp;<input type='text' value='"+questionValue+"' id='text"+sortCount+"' class='form-control' style='width:70%;display:inline;vertical-align:middle;'>&nbsp;<button type='button' class='btn btn-default remove' style='display:inline;vertical-align:middle;'>刪除</button><div><div style='height:1vh'></div></li>");							
+			}
+			function addOptionSort(){
+				sortCount += 1;
+				var temp = $("#selectOption").prop('selectedIndex')+1;
+				if($("#allOption").prop("checked")){
+					$(".sortQuestionnaire").append("<li class='dyn_div' id = 'sort_"+sortCount+"' style='margin-left:-3em;'><div><i class='fa fa-bars can_darg myMOUSE' style='color:#666666;font-size:3vh;display:inline;vertical-align:middle;'></i>&nbsp;<input type='text' value='病患選擇答案' readonly='readonly' id='text"+sortCount+"' class='form-control' style='width:70%;display:inline;vertical-align:middle;'>&nbsp;<button type='button' class='btn btn-default remove' style='display:inline;vertical-align:middle;'>刪除</button><div><div style='height:1vh'></div></li>");
+				}else{
+					$(".sortQuestionnaire").append("<li class='dyn_div' id = 'sort_"+sortCount+"' style='margin-left:-3em;'><div><i class='fa fa-bars can_darg myMOUSE' style='color:#666666;font-size:3vh;display:inline;vertical-align:middle;'></i>&nbsp;<input type='text' value='"+htmlEscapeCharacter($("#"+catchOptionNumber[temp]).val())+"' id='text"+sortCount+"' class='form-control' style='width:70%;display:inline;vertical-align:middle;'>&nbsp;<button type='button' class='btn btn-default remove' style='display:inline;vertical-align:middle;'>刪除</button><div><div style='height:1vh'></div></li>");	
+				}			
+			}
+			function addAnswerSort(){
+				sortCount += 1;			
+					$(".sortQuestionnaire").append("<li class='dyn_div' id = 'sort_"+sortCount+"' style='margin-left:-3em;'><div><i class='fa fa-bars can_darg myMOUSE' style='color:#666666;font-size:3vh;display:inline;vertical-align:middle;'></i>&nbsp;<input type='text' value='病患輸入答案' readonly='readonly' id='text"+sortCount+"' class='form-control' style='width:70%;display:inline;vertical-align:middle;'>&nbsp;<button type='button' class='btn btn-default remove' style='display:inline;vertical-align:middle;'>刪除</button><div><div style='height:1vh'></div></li>");						
+			}
+			function addTextSort(){
+				sortCount += 1;
+				$(".sortQuestionnaire").append("<li class='dyn_div' id = 'sort_"+sortCount+"' style='margin-left:-3em;'><div><i class='fa fa-bars can_darg myMOUSE' style='color:#666666;font-size:3vh;display:inline;vertical-align:middle;'></i>&nbsp;<input type='text' id='text"+sortCount+"' class='form-control' style='width:70%;display:inline;vertical-align:middle;'>&nbsp;<button type='button' class='btn btn-default remove' style='display:inline;vertical-align:middle;'>刪除</button><div><div style='height:1vh'></div></li>");							
+			}
+			function selectAll(){
+				changeMR();
+				if($("#allOption").prop("checked")){
+					previousOption = nowOption;
+					nowOption = 0;
+					allClickBtn = 1;
+					document.getElementById('selectOption').disabled=true;			
+				}else{
+					nowOption = previousOption;
+					allClickBtn = 0;
+					document.getElementById('selectOption').disabled=false;					
+				}
+				$("#sortable").empty();
+				addSaveMR();
+			}
+			function deleteImageArray(){
+				var QuestionName = $('div#froala-editor').froalaEditor('html.get', true);
+				for(var i=0;i<delNum;i++){
+					var confirm = QuestionName.indexOf(deleteImage[i]);
+					if(confirm == -1){
+						$.ajax({
+							url: "QuestionImageServlet",
+							method: "POST",
+							data: {
+							  src: deleteImage[i],
+							  state: "delete"
+							}
+						})
+						.done (function (data) {
+							console.log ('image was deleted');
+						})
+						.fail (function (err) {
+							console.log ('image delete problem: ' + JSON.stringify(err));
+						});
+					}
+				}	
+			}
+			function deleteQuestionImage(){
+				$.ajax({
+					url : "QuestionImageServlet",
+					method: "POST",
+					data : {
+						state : "deleteImageFolder",
+						questionID : questionID
+					},
+				});	
+			}
+			function changeMR(){
+				var mrSort = $("#sortable").sortable('serialize');
+				var temp = "";
+				if(mrSort){
+					temp = mrSort.split("&");
+					mrSort = "";
+					for(var i=0;i<temp.length;i++){
+						mrSort += temp[i];
+					}
+					temp = mrSort.split("sort[]=");
+				}
+				var tempString = "";
+				for(var i=1;i<temp.length;i++){
+					if($("#text"+temp[i]).val()){
+						tempString += $("#text"+temp[i]).val();
+						tempString +="<,>";
+					}						
+				}				
+				medicalRecordArray[nowOption] = null;
+				if(tempString)
+					medicalRecordArray[nowOption] = tempString;
+					
+				if($("#selectOption").val())
+					nowOption = $("#selectOption").val();
+				$("#sortable").empty();
+				addSaveMR();
+			}	
+			window.onunload = function(){
+				//網頁離開時
+				if(changed){		//把新增的圖片刪掉
+					for(var i=0;i<newNum;i++){
+						$.ajax({
+							url: "QuestionImageServlet",
+							method: "POST",
+							data: {
+							  src: newImage[i],
+							  state: "delete"
+							}
+						  })
+						  .done (function (data) {
+							console.log ('image was deleted');
+						  })
+						  .fail (function (err) {
+							console.log ('image delete problem: ' + JSON.stringify(err));
+						  });
+					}								
+				} 
+			};
+			function deleteAnswer(tempNumber){
+				changed = true;
+				medicalRecordOK = 0;
+				var optionNumber = 0;
+				for(var i=501;i<=tempNumber+500;i++){
+					if($('#'+i).val())
+						optionNumber+=1;
+				}
+				if(optionNumber==nowOption){
+					nowOption=1;
+				}
+				for(var j=optionNumber;j<catchOptionNumber.length-1;j++){
+					medicalRecordArray[j] = medicalRecordArray[j+1];
+				
+				}
+				medicalRecordArray.pop();					
+				$('#div'+tempNumber).remove();
+				answerNumber-=1;
+				if(allClickBtn) {
+					nowOption = 0;
+					previousOption = 1;
+				}
+			}
+			$(window).on("beforeunload", function() {
+				if(changed) return "尚有未儲存的修改。";
+			});
+		</script>
+		<!-- 計算高度 -->
+		<script>
+			//左邊灰框的panel-body高度
+			$(".left-list > .panel-body").css("min-height", "55vh");
+			$(".left-list > .panel-body").css("max-height", "55vh");
+			//右邊灰框的panel-body高度
+			$("#CollapseQ > .panel-body").css("height", $(".right-content").outerHeight() - $(".right-content > .panel-heading:first").outerHeight() - $(".right-content > .panel-heading:eq(1)").outerHeight() - $(".right-content > .panel-heading:eq(2)").outerHeight() - 5);
+			$("#CollapseA > .panel-body").css("height", $(".right-content").outerHeight() - $(".right-content > .panel-heading:first").outerHeight() - $(".right-content > .panel-heading:eq(1)").outerHeight() - $(".right-content > .panel-heading:eq(2)").outerHeight() - 65);
+		</script>
+	</body>
+</html>

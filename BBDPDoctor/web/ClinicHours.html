@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8"> 
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>BBDP</title>
+		<link rel="Shortcut Icon" type="image/x-icon" href="img/frame/icon.ico">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+		<link href="frame/metisMenu/metisMenu.css" rel="stylesheet">
+		<script src="frame/metisMenu/metisMenu.js"></script>
+		<link href="frame/sb-admin-2/sb-admin-2.css" rel="stylesheet">
+		<script src="frame/sb-admin-2/sb-admin-2.js"></script>
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+		<!-- 醫生端框架 css -->
+		<link href="css/doctorFrame.css" rel="stylesheet">
+	</head>
+	<body>
+		<div id="wrapper">
+			<!-- prepend navbar in doctorFrame.js -->
+			<div id="page-wrapper">
+				<div class="row">
+					<!-- 內容 -->
+					<div class="col-md-12 col-xs-12">
+						<div class="row">
+							<div class="col-md-12 col-xs-12" style="margin-top: 3vh; margin-bottom: 3vh;">
+								<span class="lead"><b>門診時間</b></span>
+								<div class="pull-right">
+									<button type="button" class="btn btn-default" onclick="location.href='EditClinicHours.html'">編輯</button>
+								</div>
+							</div>
+						</div>
+						<div class="row" style="padding-left: 1vw; padding-right: 1vw;">
+							<table class="table table-bordered table-hover">
+								<thead>
+									<tr>
+										<th class="col-md-1 col-xs-1" style="border-color: #c2eabd; background-color: #c2eabd;">時間</th>
+										<th class="col-md-1 col-xs-1" style="border-color: #c2eabd; background-color: #c2eabd;">星期一</th>
+										<th class="col-md-1 col-xs-1" style="border-color: #c2eabd; background-color: #c2eabd;">星期二</th>
+										<th class="col-md-1 col-xs-1" style="border-color: #c2eabd; background-color: #c2eabd;">星期三</th>
+										<th class="col-md-1 col-xs-1" style="border-color: #c2eabd; background-color: #c2eabd;">星期四</th>
+										<th class="col-md-1 col-xs-1" style="border-color: #c2eabd; background-color: #c2eabd;">星期五</th>
+										<th class="col-md-1 col-xs-1" style="border-color: #c2eabd; background-color: #c2eabd;">星期六</th>
+										<th class="col-md-1 col-xs-1" style="border-color: #c2eabd; background-color: #c2eabd;">星期日</th>
+									</tr>
+								</thead>
+								<tbody id="ch">
+									<tr>
+										<td>上午診</td>
+										<td></td>
+										<td></td>
+										<td></td>
+										<td></td>
+										<td></td>
+										<td></td>
+										<td></td>
+									</tr>
+									<tr>
+										<td>下午診</td>
+										<td></td>
+										<td></td>
+										<td></td>
+										<td></td>
+										<td></td>
+										<td></td>
+										<td></td>
+									</tr>
+									<tr>
+										<td>晚上診</td>
+										<td></td>
+										<td></td>
+										<td></td>
+										<td></td>
+										<td></td>
+										<td></td>
+										<td></td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						<div class="row">
+							<div class="col-md-12 col-xs-12" style="margin-top: 3vh; margin-bottom: 3vh;">
+								<span class="lead"><b>連絡電話</b></span>
+							</div>
+						</div>
+						<div class="row" style="padding-left: 1vw; padding-right: 1vw;">
+							<div class="panel panel-default" style="border-radius: 0 !important;">
+								<div id="phone" class="panel-body"></div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-12 col-xs-12" style="margin-top: 3vh; margin-bottom: 3vh;">
+								<span class="lead"><b>備註</b></span>
+							</div>
+						</div>
+						<div class="row" style="padding-left: 1vw; padding-right: 1vw;">
+							<div class="panel panel-default" style="border-radius: 0 !important;">
+								<div id="ps" class="panel-body"></div>
+							</div>
+						</div>
+					</div>			
+				</div>
+			</div>
+		</div>
+		
+		<!--  醫生端框架 js -->
+		<script src="js/doctorFrame.js"></script>
+		<!--  門診時間 js -->
+		<script src="js/clinicHours.js"></script>
+	</body>
+</html>

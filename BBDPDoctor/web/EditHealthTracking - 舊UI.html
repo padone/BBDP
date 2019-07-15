@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8"> 
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>BBDP</title>
+		<link rel="Shortcut Icon" type="image/x-icon" href="img/frame/icon.ico">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+		<link href="frame/metisMenu/metisMenu.css" rel="stylesheet">
+		<script src="frame/metisMenu/metisMenu.js"></script>
+		<link href="frame/sb-admin-2/sb-admin-2.css" rel="stylesheet">
+		<script src="frame/sb-admin-2/sb-admin-2.js"></script>
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+		<!-- 醫生端框架 css -->
+		<link href="css/doctorFrame.css" rel="stylesheet">
+	</head>
+	<body>
+		<div id="wrapper">
+			<!-- prepend navbar in doctorFrame.js -->
+			<div id="page-wrapper">
+				<div class="row">
+					<!-- 內容 -->
+					<div class="col-md-12">
+						<div class="row">
+							<!-- 左邊灰框 -->
+							<div class="col-md-4" style="margin-top: 3vh; margin-bottom: 3vh;">
+								<div class="row">
+									<div class="col-md-12">
+										<button type="button" class="btn btn-default" onclick="location.href='NewHealthTracking.html'">新增健康狀況追蹤模板</button>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-12">
+										<br />
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-12">
+										<div class="panel panel-default left-list" style="min-height: 73vh; max-height: 73vh;">
+											<div class="panel-heading">
+												<form>
+													<!-- 左邊灰框上面的選單 -->
+													<select class="form-control" id="healthType1" onChange="changeType1(this.selectedIndex);">
+														<option value="">健康狀況追蹤模板分類</option>
+													</select>
+												</form>
+											</div>
+											<div class="panel-body" style="overflow-y: auto;" id="itemDiv">
+												<div class="list-group">
+													<!-- 左邊灰框下面的項目(動態產生) 
+													<a href="EditHealthTracking.html" class="list-group-item left-list-item healthTracking">
+														<h4 class="list-group-item-heading">身高體重</h4>
+													</a>
+													<a href="EditHealthTracking.html" class="list-group-item left-list-item healthTracking">
+														<h4 class="list-group-item-heading">血壓</h4>
+													</a>
+													<a href="EditHealthTracking.html" class="list-group-item left-list-item healthTracking">
+														<h4 class="list-group-item-heading">頭痛次數</h4>
+													</a>-->
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-8" style="margin-top: 3vh; margin-bottom: 3vh;">
+								<div class="row">
+									<div class="col-md-10 col-sm-10 col-xs-9">
+										<input type="text" class="form-control" id="modelName" placeholder="請輸入模板名稱..." value="" />
+									</div>
+									<div class="col-md-2 col-sm-2 col-xs-3">
+										<!-- 右上角的更多按鈕 -->
+										<div class="btn-group pull-right">
+											<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+												更多
+												<span class="caret"></span>
+											</button>
+											<ul class="dropdown-menu" role="menu">
+												<li><a onclick="" id="update" style="cursor: pointer;">儲存</a></li>
+												<li><a onclick="" id="delete" style="cursor: pointer;">刪除</a></li>
+											</ul>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-12">
+										<br />
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-12">
+										<!-- 右邊灰框 -->
+										<div class="panel panel-default right-content" style="min-height: 73vh; max-height: 73vh;">
+											<div class="panel-heading">
+												<!-- 右邊上面的分類 -->
+												<div class="row" style="margin-left: 0.5vw;">
+													<h5><b>分類</b></h5>
+												</div>
+												<div class="row">
+													<div class="col-md-4">
+														<select class="form-control" id="healthType2" onChange="changeType2()">
+															<option value="all">健康狀況追蹤模板分類</option>
+														</select>
+													</div>
+													<div class="col-md-1">
+														<h5>或</h5>
+													</div>
+													<div class="col-md-4" >
+														<input type="text" class="form-control" id="healthTypeInput" placeholder="請輸入要新增的分類名稱..." disabled />
+													</div>
+												</div>
+												<div class="row" style="margin-left: 0.5vw;">
+													<h5><b>紀錄單位</b></h5>
+												</div>
+												<!-- 右邊上面的紀錄單位 -->
+												<div class="row">
+													<div class="col-md-4">
+														<select class="form-control" id="cycle" onChange="">
+															<option value="0.0">隨時新增紀錄</option>
+															<option value="1.1">一天一次</option>
+															<option value="1.2">一天兩次</option>
+															<option value="1.3">一天三次</option>
+															<option value="1.4">一天四次</option>
+															<option value="2.1">二天一次</option>
+															<option value="3.1">三天一次</option>
+															<option value="7.1">一周一次</option>
+															<option value="14.1">兩周一次</option>
+															<option value="50.1">一月一次</option>
+														</select>
+													</div>
+												</div>
+												<div class="row" style="margin-left: 0.5vw;">
+													<h5><b>預設顯示圖表類型</b></h5>
+												</div>
+												<!-- 右邊上面的預設顯示圖表類型 -->
+												<div class="row">
+													<div class="col-md-4">
+														<select class="form-control" id="chart" onChange="">
+															<option value="timeseries">折線圖</option>
+															<option value="spline">花樣圖</option>
+															<option value="pie">圓餅圖</option>
+															<option value="bar">長條圖</option>
+															<option value="area-spline">區域圖</option>
+															<option value="scatter">散點圖</option>
+														</select>
+													</div>
+												</div>
+											</div>
+											<div class="panel-body" style="overflow-y: auto;">
+												<!-- 右邊灰框中間的項目表格(動態產生) -->
+												<table class="table table-bordered">
+													<thead>
+														<tr>
+															<th style="background-color: #F7E56E;">項目</th>
+															<th style="background-color: #F7E56E;">單位</th>
+															<th style="background-color: #F7E56E;">合理範圍</th>
+															<th style="background-color: #F7E56E;">警示值</th>
+														</tr>
+													</thead>
+													<tbody id="display">
+														<!-- 右邊灰框中間表格的健康狀況追蹤項目(動態產生) -->
+														<!-- 第一個健康狀況追蹤項目 
+														<tr>
+															<td>
+																<form>
+																	<div class="form-group">
+																		<input type="text" class="form-control" placeholder="項目名稱" value="身高" />
+																	</div>
+																	<div class="form-group">
+																		<button type="button" class="btn btn-default btn-sm" onclick="">刪除</button>
+																	</div>
+																</form>
+															</td>
+															<td>
+																<form>
+																	<div class="form-group">
+																		<label class="radio-inline"><input type="radio" checked>有</label>
+																	</div>
+																	<div class="form-group">
+																		<input type="text" class="form-control" value="公分(cm)" />
+																	</div>
+																</form>
+															</td>
+															<td>
+																<form>
+																	<div class="form-group">
+																		<label class="radio-inline"><input type="radio">有</label>
+																	</div>
+																	<div class="form-group">
+																		<input type="text" class="form-control" disabled />
+																	</div>
+																	<div class="form-group">
+																		<h5>到</h5>
+																	</div>
+																	<div class="form-group">
+																		<input type="text" class="form-control" disabled />
+																	</div>
+																</form>
+															</td>
+															<td>
+																<form>
+																	<div class="form-group">
+																		<label class="radio-inline"><input type="radio">有</label>
+																	</div>
+																	<div class="form-group row">
+																		<div class="col-md-7" style="padding-right: 0;">
+																			<input type="text" class="form-control" disabled />
+																		</div>
+																		<div class="col-md-5" style="padding-right: 0;">
+																			<h5>以上</h5>
+																		</div>
+																	</div>
+																	<div class="form-group">
+																		<label class="radio-inline"><input type="radio">有</label>
+																	</div>
+																	<div class="form-group row">
+																		<div class="col-md-7" style="padding-right: 0;">
+																			<input type="text" class="form-control" disabled />
+																		</div>
+																		<div class="col-md-5" style="padding-right: 0;">
+																			<h5>以下</h5>
+																		</div>
+																	</div>
+																</form>
+															</td>
+														</tr>-->
+														<!-- 第二個健康狀況追蹤項目 
+														<tr>
+															<td>
+																<form>
+																	<div class="form-group">
+																		<input type="text" class="form-control" placeholder="項目名稱" value="體重" />
+																	</div>
+																	<div class="form-group">
+																		<button type="button" class="btn btn-default btn-sm" onclick="">刪除</button>
+																	</div>
+																</form>
+															</td>
+															<td>
+																<form>
+																	<div class="form-group">
+																		<label class="radio-inline"><input type="radio" checked>有</label>
+																	</div>
+																	<div class="form-group">
+																		<input type="text" class="form-control" value="公斤(kg)" />
+																	</div>
+																</form>
+															</td>
+															<td>
+																<form>
+																	<div class="form-group">
+																		<label class="radio-inline"><input type="radio">有</label>
+																	</div>
+																	<div class="form-group">
+																		<input type="text" class="form-control" disabled />
+																	</div>
+																	<div class="form-group">
+																		<h5>到</h5>
+																	</div>
+																	<div class="form-group">
+																		<input type="text" class="form-control" disabled />
+																	</div>
+																</form>
+															</td>
+															<td>
+																<form>
+																	<div class="form-group">
+																		<label class="radio-inline"><input type="radio">有</label>
+																	</div>
+																	<div class="form-group row">
+																		<div class="col-md-7" style="padding-right: 0;">
+																			<input type="text" class="form-control" disabled />
+																		</div>
+																		<div class="col-md-5" style="padding-right: 0;">
+																			<h5>以上</h5>
+																		</div>
+																	</div>
+																	<div class="form-group">
+																		<label class="radio-inline"><input type="radio">有</label>
+																	</div>
+																	<div class="form-group row">
+																		<div class="col-md-7" style="padding-right: 0;">
+																			<input type="text" class="form-control" disabled />
+																		</div>
+																		<div class="col-md-5" style="padding-right: 0;">
+																			<h5>以下</h5>
+																		</div>
+																	</div>
+																</form>
+															</td>
+														</tr>-->
+													</tbody>
+												</table>
+											</div>
+											<div class="panel-footer" style="background-color: white;">
+												<div class="row" style="margin-top: 1vh;">	
+													<div class="col-md-12">
+														<!-- 右邊下面的新增項目按鈕 -->
+														<button type="button" class="btn btn-default" onClick="addDetail()" id="newDetail" disabled>新增項目</button>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<!-- modalGenerator js -->
+		<script src="js/modalGenerator.js"></script>
+		
+		<!-- 醫生端框架 js -->
+		<script src="js/doctorFrame.js"></script>
+		<!-- 計算高度 -->
+		<script>
+			//左邊灰框的panel-body高度
+			$(".left-list > .panel-body").css("min-height", "60vh");
+			$(".left-list > .panel-body").css("max-height", "60vh");
+			//右邊灰框的panel-body高度
+			$(".right-content > .panel-body").css("height", $(".right-content").outerHeight() - $(".right-content > .panel-heading").outerHeight() - 10 - $(".right-content > .panel-footer").outerHeight());
+		</script>
+		
+		<!-- 左半邊的 + 右半邊able和儲存 -->
+		<script src="js/healthModelFrame.js"></script>
+		<!-- editHealthTracking.js.js -->
+		<script src="js/editHealthTracking.js"></script>
+	</body>
+</html>
